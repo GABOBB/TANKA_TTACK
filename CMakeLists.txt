@@ -3,4 +3,6 @@ project(TANK_ATTACK)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(TANK_ATTACK main.cpp)
+add_executable(TANK_ATTACK main.cpp
+            Graph.cpp
+            Graph.h)

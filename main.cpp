@@ -4,9 +4,13 @@
 int main(){
     Graph mapa;
     mapa.print();
-    //mapa.agregar_arista(2,6,6);
-    mapa.agregar_arista(2,4,4);
-    mapa.agregar_arista(2,3,3);
+
+    mapa.agregar_arista(1,2,1);
+    mapa.agregar_arista(1,1,3);
+    mapa.agregar_arista(1,6,9);
+    mapa.agregar_arista(1,9,4);
+    mapa.agregar_arista(1,4,3);
+
     mapa.print();
     return 0;
 }

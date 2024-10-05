@@ -5,9 +5,11 @@ int main(){
     Graph mapa = Graph(4,4);
     mapa.print();
 
-   mapa.prueva();
+   mapa.mapa_adyacencia();
 
     mapa.print();
+
+    mapa.adyacencia_mapa();
     return 0;
 }
 /*

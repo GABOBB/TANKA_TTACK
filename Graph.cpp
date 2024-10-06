@@ -6,6 +6,9 @@
 using namespace std;
 
 Graph::Graph(int x, int y){
+  filas = x;
+  columnas = y;
+
   int n = x*y;
     Matriz_Adyacencia = vector<vector<int>>(n,vector<int>(n,0));
 }
@@ -28,19 +31,19 @@ void Graph::agregar_arista(int peso, int n, int m){
     cout<<Matriz_Adyacencia.size()<<" tr "<<Matriz_Adyacencia[0].size()<<endl;
     return;
   }
-    cout<<n<<" "<<m<<endl;
+  //  cout<<n<<" "<<m<<endl;
     Matriz_Adyacencia[n][m] = peso;
     Matriz_Adyacencia[m][n] = peso;
 };
 
-void Graph::prueva(){
+void Graph::mapa_adyacencia(){
     int n = 4;//Matriz_Adyacencia.size();
     int m = 4;//Matriz_Adyacencia[0].size();
     int MT[4][4] = {
-        {1,1,1,0},
-        {1,0,0,0},
-        {0,0,0,0},
-        {0,0,0,0}
+        {1,1,1,1},
+        {1,1,0,1},
+        {1,0,1,1},
+        {1,1,0,1}
     };
     for(int i=0;i<n;i++){
         for(int j=0;j<m;j++){
@@ -53,8 +56,6 @@ void Graph::prueva(){
                     if((i+x>-1 && i+x<n) && (j+y>-1  && j+y<m)){
                         if(MT[i][j]==1 && MT[i+x][j+y]==1){
                             agregar_arista(1,(i*4)+j,((i+x)*4)+y+j);
-                        }else if(MT[i][j]==1 && MT[i+x][j+y]==0 || MT[i][j]==0 && MT[i+x][j+y]==1){
-                            agregar_arista(2,(i*4)+j,((i+x)*4)+y+j);
                         }
                    }
 
@@ -62,5 +63,29 @@ void Graph::prueva(){
 
             }
         }
+    }
+};
+
+void Graph::adyacencia_mapa(){
+    int Matriz_Mapa[filas][columnas] = {{0,0,0,0},
+                                       {0,0,0,0},
+                                       {0,0,0,0},
+                                       {0,0,0,0}};
+    for(int i = 0; i < filas*columnas; i++){
+      for(int j = 0; j < filas*columnas; j++){
+        if(Matriz_Adyacencia[i][j] == 1){
+            cout<<i<<","<<j << " -> "<< i/filas<<" "<<i%columnas<<endl;
+            Matriz_Mapa[i/filas][i%columnas] = 1;
+        }else if(Matriz_Adyacencia[i][j] == 2){
+            Matriz_Mapa[i/filas][i%columnas] = 00;
+        }
+
+      }
+    }
+    for(int i = 0; i < filas; i++){
+      for(int j = 0; j < columnas; j++){
+        cout<<Matriz_Mapa[i][j]<<" ";
+      }
+      cout<<endl;
     }
 };

@@ -4,12 +4,15 @@
 int main(){
     Graph mapa = Graph(4,4);
     mapa.print();
-
-   mapa.mapa_adyacencia();
-
+    mapa.mapa_adyacencia();
     mapa.print();
 
+    int in[2] ={0,0};
+    int out[2] ={1,2};
+    cout<<mapa.Linea_Vista(in,out,false)<<endl;
     mapa.adyacencia_mapa();
+
+
     return 0;
 }
 /*

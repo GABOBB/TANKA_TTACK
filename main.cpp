@@ -2,14 +2,14 @@
 #include "Graph.h"
 
 int main(){
-    Graph mapa = Graph(4,4);
+    Graph mapa = Graph(5,5);
     mapa.print();
     mapa.mapa_adyacencia();
     mapa.print();
 
-    int in[2] ={0,0};
-    int out[2] ={1,2};
-    cout<<mapa.Linea_Vista(in,out,false)<<endl;
+    int in[2] ={2,4};
+    int out[2]= {2,1};
+    cout<<mapa.Linea_Vista(in,out,true)<<endl;
     mapa.adyacencia_mapa();
 
 

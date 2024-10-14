@@ -10,6 +10,7 @@ using namespace std;
 
 class Graph {
     vector<vector<int>> Matriz_Adyacencia;
+
     int filas;
     int columnas;
 
@@ -22,7 +23,7 @@ public:
         void adyacencia_mapa();
 
         string Linea_Vista(int in[2],int out[2],bool chocado);
-        string Linea_Vista_aux(int in[2]);
+        string Linea_Vista_aux(int in[2],int out[2]);
 
         void BFS(int in, int out);
         void Dijkstra(int in, int out);

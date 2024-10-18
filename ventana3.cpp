@@ -16,6 +16,20 @@
 
 #include "ventana3.h"
 
+// Definimos la matriz
+const int filas = 8;
+const int columnas = 8;
+int MT[filas][columnas] = {
+    {1, 0, 1, 1, 1, 0, 1, 1},
+    {1, 1, 1, 1, 1, 1, 0, 1},
+    {1, 1, 0, 1, 1, 1, 1, 1},
+    {1, 1, 1, 0, 1, 1, 1, 1},
+    {1, 0, 1, 1, 1, 1, 0, 1},
+    {1, 1, 1, 1, 0, 1, 1, 1},
+    {1, 0, 1, 1, 1, 1, 1, 0},
+    {0, 1, 1, 1, 1, 0, 1, 1}
+};
+
 MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 
     // Obtener el tamaño de la pantalla
@@ -38,12 +52,52 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 
     // Crear el segundo label que actuará como tablero de juego
     label2 = new QLabel(this);
-    label2->setFixedSize(600, 400);  // Tamaño más pequeño para el tablero de juego
+    label2->setFixedSize(800, 500);  // Tamaño más pequeño para el tablero de juego
     label2->setStyleSheet("background-color: rgba(255, 255, 255, 0.5);");  // Fondo semi-transparente
     label2->setAlignment(Qt::AlignCenter);  // Centrar el contenido
-    label2->setGeometry((screenWidth - 600) / 2, (screenHeight - 400) / 2, 600, 400); // Centrar el tablero
+    label2->setGeometry((screenWidth - 800) / 2, (screenHeight - 500) / 2, 800, 500); // Centrar el tablero
+
+    // Crear el QGridLayout y añadirlo a label2
+    QGridLayout *gridLayout = new QGridLayout(label2);
+    gridLayout->setSpacing(0);  // Espacio entre los elementos
+
+
+    // Distribuir las celdas de forma uniforme
+    for (int i = 0; i < filas; ++i) {
+        gridLayout->setRowStretch(i, 1);  // Misma altura para cada fila
+    }
+    for (int j = 0; j < columnas; ++j) {
+        gridLayout->setColumnStretch(j, 1);  // Misma anchura para cada columna
+    }
+
+    // Cargar la imagen que se mostrará para los ceros
+    QPixmap imagenCero("/home/josepa/Imágenes/coble2.jpeg");
+
+    // Rellenar el tablero
+    for (int i = 0; i < filas; ++i) {
+        for (int j = 0; j < columnas; ++j) {
+            QLabel *cellLabel = new QLabel();
+            cellLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+            if (MT[i][j] == 0) {
+                // Establecer la imagen escalada para que ocupe toda la casilla
+                cellLabel->setPixmap(imagenCero.scaled(
+                    cellLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                cellLabel->setAlignment(Qt::AlignCenter);  // Alinear la imagen al centro
+            } else {
+                cellLabel->setStyleSheet("background-color: transparent;");  // Casilla vacía
+            }
+
+            // Agregar el QLabel al layout
+            gridLayout->addWidget(cellLabel, i, j);
+        }
+    }
+
+
 
     crearBordeAlrededor();
+
+
 
     // Crear un QLabel para el contador
     contadorLabel = new QLabel(this);
@@ -68,6 +122,8 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
     // Conectar el combo box para cambiar el fondo según la selección
     connect(comboBox2, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::cambiarFondo);
 }
+
+
 
 void MainWindow::cambiarFondo(int index) {
     // Cambiar la imagen según el índice seleccionado en el combo box

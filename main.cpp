@@ -6,10 +6,11 @@ int main(){
     mapa.print();
     mapa.mapa_adyacencia();
     mapa.print();
-
-    int in[2] ={2,4};
-    int out[2]= {2,1};
-    cout<<mapa.Linea_Vista(in,out,true)<<endl;
+    coords in = coords(2,0);
+    coords out = coords(2,4 );
+    //int in[2] ={1,4};
+    //int out[2]= {4,2};
+    cout<<mapa.Linea_Vista_aux(in,out,false)<<endl;
     mapa.adyacencia_mapa();
 
 

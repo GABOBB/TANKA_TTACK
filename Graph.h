@@ -7,6 +7,10 @@
 #include <iostream>
 #include <vector>
 using namespace std;
+struct coords {
+    int i, j;
+    coords(int i, int j) : i(i), j(j) {}
+};
 
 class Graph {
     vector<vector<int>> Matriz_Adyacencia;
@@ -22,8 +26,8 @@ public:
         void mapa_adyacencia();
         void adyacencia_mapa();
 
-        string Linea_Vista(int in[2],int out[2],bool chocado);
-        string Linea_Vista_aux(int in[2],int out[2]);
+        string Linea_Vista(coords in,coords out,bool chocado);
+        string Linea_Vista_aux(coords in,coords out, bool c);
 
         void BFS(int in, int out);
         void Dijkstra(int in, int out);

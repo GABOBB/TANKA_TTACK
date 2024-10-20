@@ -12,6 +12,7 @@
 #include <QScreen>
 #include <QTimer>
 #include <QTime>
+#include <QPushButton>
 
 
 #include "ventana3.h"
@@ -29,6 +30,8 @@ int MT[filas][columnas] = {
     {1, 0, 1, 1, 1, 1, 1, 0},
     {0, 1, 1, 1, 1, 0, 1, 1}
 };
+
+QTimer *timer;
 
 MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 
@@ -108,10 +111,14 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
     tiempoRestante = QTime(0, 5, 0);  // Iniciar en 5 minutos
     contadorLabel->setText(tiempoRestante.toString("mm:ss"));
 
-    // Crear un QTimer para contar el tiempo
-    QTimer *timer = new QTimer(this);
+    // Crear el QTimer pero no iniciarlo aún
+    timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::actualizarContador);
-    timer->start(1000);  // Actualizar cada segundo
+
+    // Crear el botón de inicio del contador
+    QPushButton *startButton = new QPushButton("Iniciar Contador", this);
+    startButton->setGeometry(10, 100, 200, 30);  // Posición y tamaño
+    connect(startButton, &QPushButton::clicked, this, &MainWindow::iniciarContador);
 
     QComboBox *comboBox2 = new QComboBox(this);
     comboBox2->setFixedSize(200, 30); // Tamaño del combo box
@@ -144,6 +151,11 @@ void MainWindow::cambiarFondo(int index) {
     }
     label1->setPixmap(pixmap1.scaled(label1->size(), Qt::KeepAspectRatioByExpanding));
     //label2->setPixmap(pixmap2.scaled(label2->size(), Qt::KeepAspectRatioByExpanding));
+}
+
+// Función para iniciar el contador al presionar el botón
+void MainWindow::iniciarContador() {
+    timer->start(1000);  // El timer se actualiza cada segundo
 }
 
 void MainWindow::actualizarContador() {

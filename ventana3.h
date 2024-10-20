@@ -20,8 +20,9 @@ public:
 
     private slots:
         void actualizarContador();
-    void cambiarFondo(int index);
-    void crearBordeAlrededor();     // Función para crear el borde alrededor del tablero
+        void iniciarContador();
+        void cambiarFondo(int index);
+        void crearBordeAlrededor();     // Función para crear el borde alrededor del tablero
 
 private:
     QLabel *label1;

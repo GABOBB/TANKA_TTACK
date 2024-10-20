@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
     label1->setGeometry(0, 0, screenWidth, screenHeight); // Posición y tamaño de label1
 
     // Cargar una imagen inicial como fondo
-    QPixmap pixmap1("/home/josepa/Imágenes/Download Boxing Ring Stage Background for free.jpeg");
+    QPixmap pixmap1("../photos/box.jpeg");
     label1->setPixmap(pixmap1.scaled(label1->size(), Qt::KeepAspectRatioByExpanding));
 
     // Crear el segundo label que actuará como tablero de juego
@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
     }
 
     // Cargar la imagen que se mostrará para los ceros
-    QPixmap imagenCero("/home/josepa/Escritorio/TANK_ATTACK/photos/coble2.jpeg");
+    QPixmap imagenCero("../photos/coble2.jpeg");
 
     // Rellenar el tablero
     for (int i = 0; i < filas; ++i) {
@@ -137,15 +137,15 @@ void MainWindow::cambiarFondo(int index) {
     QPixmap pixmap1;
     switch(index) {
         case 2:
-            pixmap1.load("/home/josepa/Escritorio/TANK_ATTACK/photos/jpeg");
+            pixmap1.load("../photos/coble2.jpeg");
             //pixmap2.load("/home/josepa/Imágenes/Gif background for creations.gif");
             break;
         case 1:
-            pixmap1.load("/home/josepa/Escritorio/TANK_ATTACK/photos/.gif");
+            pixmap1.load("../photos/.gif");
             //pixmap2.load("/home/josepa/Imágenes/Seaside Beach PNG Picture, Hand Drawn Cartoon Beach Seaside Elements, Beach Clipart, Beach Seaside, Beach PNG Image For Free Download.jpeg");
             break;
         case 0:
-            pixmap1.load("/home/josepa/Escritorio/TANK_ATTACK/photos/box.jpeg");
+            pixmap1.load("../photos/box.jpeg");
             //pixmap2.load("/home/josepa/Imágenes/Gif background for creations.gif");
             break;
     }

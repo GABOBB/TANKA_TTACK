@@ -31,14 +31,14 @@ Graph::Graph(int x, int y){
 
 
 
-void Graph::mapa_adyacencia(){
-    int MT[filas][columnas] = {
-        {1,1,1,1,1},
-        {1,1,1,1,1},
-        {1,1,0,1,1},
-        {1,1,0,1,1},
-        {1,1,0,1,1},
-    };
+void Graph::mapa_adyacencia(vector<vector<int>>& mapa){
+   // int MT[filas][columnas] = {
+   //     {1,1,1,1,1},
+   //     {1,1,1,1,1},
+   //     {1,1,0,1,1},
+   //     {1,1,0,1,1},
+   //     {1,1,0,1,1},
+   // };
     for(int i=0;i<filas;i++){
         for(int j=0;j<columnas;j++){
 
@@ -48,7 +48,7 @@ void Graph::mapa_adyacencia(){
                     if(x==0 && y==0)continue;
 
                     if((i+x>-1 && i+x<filas) && (j+y>-1  && j+y<columnas)){
-                        if(MT[i][j]==1 && MT[i+x][j+y]==1){
+                        if(mapa[i][j]==1 && mapa[i+x][j+y]==1){
                             cout<<(i*filas)+j<<","<<((i+x)*filas)+y+j<<endl;
                             agregar_arista(1,(i*filas)+j,((i+x)*filas)+y+j);
                         }
@@ -108,7 +108,7 @@ void Graph::print(){
   cout << "~~~~~~~~~~~~~~~~~~~~final matriz de adyacencia~~~~~~~~~~~~~~~~~~~~" << endl;
 }
 
-string Graph::Linea_Vista_aux(coords in, coords out, bool c) {
+string Graph::Linea_Vista_tanque(coords in, coords out, bool c) {
     cout<<out.i<<" "<<out.j<<" "<<in.i<<" "<<in.j<<endl;
     std::string path = "";
     bool crashed  = c;
@@ -129,7 +129,7 @@ string Graph::Linea_Vista_aux(coords in, coords out, bool c) {
                     //}while(in.i+randI<0 || in.i+randI<filas || in.j+randJ<0 || in.j+randJ>columnas);
                     int tempI = in.i + randI; int tempJ = in.j + randJ;
                     coords tempOUT = coords(tempI,tempJ);
-                    path.append(Linea_Vista_aux(in,tempOUT,true));
+                    path.append(Linea_Vista_tanque(in,tempOUT,true));
                     crashed = true;
                 }else{
                     return path;
@@ -149,7 +149,7 @@ string Graph::Linea_Vista_aux(coords in, coords out, bool c) {
                     //}while(in.i+randI<0 || in.i+randI<filas || in.j+randJ<0 || in.j+randJ>columnas);
                     int tempI = in.i + randI; int tempJ = in.j + randJ;
                     coords tempOUT = coords(tempI,tempJ);
-                    path.append(Linea_Vista_aux(in,tempOUT,true));
+                    path.append(Linea_Vista_tanque(in,tempOUT,true));
                     crashed = true;
                 }else{
                     return path;
@@ -169,7 +169,7 @@ string Graph::Linea_Vista_aux(coords in, coords out, bool c) {
                   //  }while(in.i+randI<0 || in.i+randI<filas || in.j+randJ<0 || in.j+randJ>columnas);
                     int tempI = in.i + randI; int tempJ = in.j + randJ;
                     coords tempOUT = coords(tempI,tempJ);
-                    path.append(Linea_Vista_aux(in,tempOUT,true));
+                    path.append(Linea_Vista_tanque(in,tempOUT,true));
                     crashed = true;
                 }else{
                     return path;
@@ -189,7 +189,7 @@ string Graph::Linea_Vista_aux(coords in, coords out, bool c) {
                     int tempI = in.i + randI;
                     int tempJ = in.j + randJ;
                     coords tempOUT = coords(1,2);
-                    path.append(Linea_Vista_aux(in,tempOUT,true));
+                    path.append(Linea_Vista_tanque(in,tempOUT,true));
                     crashed = true;
                 }else{
                     return path;

@@ -14,6 +14,8 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Charts)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Charts)
 
 set(PROJECT_SOURCES
+        Graph.cpp
+        Graph.h
         ventana3.cpp
         ventana3.h
         main.cpp

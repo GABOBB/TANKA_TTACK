@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
     }
 
     // Cargar la imagen que se mostrará para los ceros
-    QPixmap imagenCero("/home/josepa/Imágenes/coble2.jpeg");
+    QPixmap imagenCero("/home/josepa/Escritorio/TANK_ATTACK/photos/coble2.jpeg");
 
     // Rellenar el tablero
     for (int i = 0; i < filas; ++i) {
@@ -116,7 +116,7 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
     connect(timer, &QTimer::timeout, this, &MainWindow::actualizarContador);
 
     // Crear el botón de inicio del contador
-    QPushButton *startButton = new QPushButton("Iniciar Contador", this);
+    QPushButton *startButton = new QPushButton("Iniciar Partida", this);
     startButton->setGeometry(10, 100, 200, 30);  // Posición y tamaño
     connect(startButton, &QPushButton::clicked, this, &MainWindow::iniciarContador);
 
@@ -137,15 +137,15 @@ void MainWindow::cambiarFondo(int index) {
     QPixmap pixmap1;
     switch(index) {
         case 2:
-            pixmap1.load("/home/josepa/Imágenes/jpeg");
+            pixmap1.load("/home/josepa/Escritorio/TANK_ATTACK/photos/jpeg");
             //pixmap2.load("/home/josepa/Imágenes/Gif background for creations.gif");
             break;
         case 1:
-            pixmap1.load("/home/josepa/Imágenes/Gif background for creations.gif");
+            pixmap1.load("/home/josepa/Escritorio/TANK_ATTACK/photos/.gif");
             //pixmap2.load("/home/josepa/Imágenes/Seaside Beach PNG Picture, Hand Drawn Cartoon Beach Seaside Elements, Beach Clipart, Beach Seaside, Beach PNG Image For Free Download.jpeg");
             break;
         case 0:
-            pixmap1.load("/home/josepa/Imágenes/Download Boxing Ring Stage Background for free.jpeg");
+            pixmap1.load("/home/josepa/Escritorio/TANK_ATTACK/photos/box.jpeg");
             //pixmap2.load("/home/josepa/Imágenes/Gif background for creations.gif");
             break;
     }

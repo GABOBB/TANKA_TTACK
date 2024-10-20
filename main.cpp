@@ -1,7 +1,17 @@
-#include <iostream>
+#include <QApplication>
+#include "ventana3.h"
 #include "Graph.h"
 
-int main(){
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+
+    MainWindow window;
+    window.setWindowTitle("Tank_Attack");
+    window.show();
+
+
+    return app.exec();
+
     Graph mapa = Graph(5,5);
     mapa.print();
     mapa.mapa_adyacencia();
@@ -16,10 +26,5 @@ int main(){
 
     return 0;
 }
-/*
- mapa.agregar_arista(1,2,1);
-    mapa.agregar_arista(1,1,3);
-    mapa.agregar_arista(1,6,9);
-    mapa.agregar_arista(1,9,4);
-    mapa.agregar_arista(1,4,3);
-*/
+
+

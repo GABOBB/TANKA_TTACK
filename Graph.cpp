@@ -7,8 +7,8 @@
 #include <ctime>
 #include <cmath>
 #include <queue>
-#include <iostream>     // Para imprimir en consola con std::cout
-#include <vector>       // Para utilizar std::vector en la representación de la matriz de adyacencia
+#include <iostream>
+#include <vector>
 #include <climits>      // Para usar INT_MAX (valor máximo de un entero)
 #include <unordered_set> // Para almacenar nodos visitados en el algoritmo A*
 #include <algorithm>

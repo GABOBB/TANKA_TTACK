@@ -32,11 +32,11 @@ public:
 
         void print();
         void agregar_arista(int peso, int n, int m);
-        void mapa_adyacencia();
+        void mapa_adyacencia(vector<vector<int>>& mapa);
         void adyacencia_mapa();
 
         string Linea_Vista(coords in,coords out,bool chocado);
-        string Linea_Vista_aux(coords in,coords out, bool c);
+        string Linea_Vista_tanque(coords in,coords out, bool c);
         string Dijkstra(coords in, coords out);
 
         void BFS(int in, int out);

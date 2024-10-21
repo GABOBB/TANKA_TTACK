@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
     label2->setAlignment(Qt::AlignCenter);  // Centrar el contenido
     label2->setGeometry((screenWidth - 800) / 2, (screenHeight - 500) / 2, 800, 500); // Centrar el tablero
 
+
     crearBordeAlrededor();
 
     // Crear la matriz usando vectores
@@ -125,7 +126,9 @@ void MainWindow::cambiarFondo(int index) {
     QPixmap pixmap1;
     switch(index) {
         case 2:
+
             pixmap1.load("../photos/jpeg");
+
             //pixmap2.load("/home/josepa/Imágenes/Gif background for creations.gif");
             break;
         case 1:

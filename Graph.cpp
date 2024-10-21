@@ -31,14 +31,14 @@ Graph::Graph(int x, int y){
 
 
 
-void Graph::mapa_adyacencia(){
-    int MT[filas][columnas] = {
-        {1,1,1,1,1},
-        {1,1,1,1,1},
-        {1,1,0,1,1},
-        {1,1,0,1,1},
-        {1,1,0,1,1},
-    };
+void Graph::mapa_adyacencia(vector<vector<int>>& mapa){
+   // int MT[filas][columnas] = {
+   //     {1,1,1,1,1},
+   //     {1,1,1,1,1},
+   //     {1,1,0,1,1},
+   //     {1,1,0,1,1},
+   //     {1,1,0,1,1},
+   // };
     for(int i=0;i<filas;i++){
         for(int j=0;j<columnas;j++){
 
@@ -48,7 +48,7 @@ void Graph::mapa_adyacencia(){
                     if(x==0 && y==0)continue;
 
                     if((i+x>-1 && i+x<filas) && (j+y>-1  && j+y<columnas)){
-                        if(MT[i][j]==1 && MT[i+x][j+y]==1){
+                        if(mapa[i][j]==1 && mapa[i+x][j+y]==1){
                             cout<<(i*filas)+j<<","<<((i+x)*filas)+y+j<<endl;
                             agregar_arista(1,(i*filas)+j,((i+x)*filas)+y+j);
                         }
@@ -108,7 +108,7 @@ void Graph::print(){
   cout << "~~~~~~~~~~~~~~~~~~~~final matriz de adyacencia~~~~~~~~~~~~~~~~~~~~" << endl;
 }
 
-string Graph::Linea_Vista_aux(coords in, coords out, bool c) {
+string Graph::Linea_Vista_tanque(coords in, coords out, bool c) {
     cout<<out.i<<" "<<out.j<<" "<<in.i<<" "<<in.j<<endl;
     std::string path = "";
     bool crashed  = c;
@@ -129,7 +129,7 @@ string Graph::Linea_Vista_aux(coords in, coords out, bool c) {
                     //}while(in.i+randI<0 || in.i+randI<filas || in.j+randJ<0 || in.j+randJ>columnas);
                     int tempI = in.i + randI; int tempJ = in.j + randJ;
                     coords tempOUT = coords(tempI,tempJ);
-                    path.append(Linea_Vista_aux(in,tempOUT,true));
+                    path.append(Linea_Vista_tanque(in,tempOUT,true));
                     crashed = true;
                 }else{
                     return path;
@@ -149,7 +149,7 @@ string Graph::Linea_Vista_aux(coords in, coords out, bool c) {
                     //}while(in.i+randI<0 || in.i+randI<filas || in.j+randJ<0 || in.j+randJ>columnas);
                     int tempI = in.i + randI; int tempJ = in.j + randJ;
                     coords tempOUT = coords(tempI,tempJ);
-                    path.append(Linea_Vista_aux(in,tempOUT,true));
+                    path.append(Linea_Vista_tanque(in,tempOUT,true));
                     crashed = true;
                 }else{
                     return path;
@@ -169,7 +169,7 @@ string Graph::Linea_Vista_aux(coords in, coords out, bool c) {
                   //  }while(in.i+randI<0 || in.i+randI<filas || in.j+randJ<0 || in.j+randJ>columnas);
                     int tempI = in.i + randI; int tempJ = in.j + randJ;
                     coords tempOUT = coords(tempI,tempJ);
-                    path.append(Linea_Vista_aux(in,tempOUT,true));
+                    path.append(Linea_Vista_tanque(in,tempOUT,true));
                     crashed = true;
                 }else{
                     return path;
@@ -189,7 +189,7 @@ string Graph::Linea_Vista_aux(coords in, coords out, bool c) {
                     int tempI = in.i + randI;
                     int tempJ = in.j + randJ;
                     coords tempOUT = coords(1,2);
-                    path.append(Linea_Vista_aux(in,tempOUT,true));
+                    path.append(Linea_Vista_tanque(in,tempOUT,true));
                     crashed = true;
                 }else{
                     return path;
@@ -203,7 +203,87 @@ string Graph::Linea_Vista_aux(coords in, coords out, bool c) {
     }
     return path;
 }
+string Graph::Dijkstra(coords inicio, coords objetivo) {
+    int src = inicio.i * columnas + inicio.j;  // Convertir coordenadas de inicio a índice
+    int goal = objetivo.i * columnas + objetivo.j;  // Convertir destino a índice
+    int n = filas * columnas;
 
+    // Inicialización de vectores
+    vector<int> dist(n, INT_MAX);
+    vector<int> prev(n, -1);
+    vector<bool> visitado(n, false);
+    dist[src] = 0;
+
+    // Cola de prioridad para seleccionar el nodo con menor distancia
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    pq.push({0, src});
+
+    while (!pq.empty()) {
+        int u = pq.top().second;
+        pq.pop();
+
+        if (visitado[u]) continue;
+        visitado[u] = true;
+
+        if (u == goal) break;  // Si llegamos al destino, paramos
+
+        // Expandimos los vecinos
+        for (int v = 0; v < n; ++v) {
+            if (Matriz_Adyacencia[u][v] > 0 && !visitado[v]) {
+                int newDist = dist[u] + Matriz_Adyacencia[u][v];
+                if (newDist < dist[v]) {
+                    dist[v] = newDist;
+                    prev[v] = u;  // Guardamos el nodo anterior
+                    pq.push({dist[v], v});
+                }
+            }
+        }
+    }
+
+    // Si no se encontró un camino, devolver una cadena vacía
+    if (dist[goal] == INT_MAX) {
+        return "";  // No hay camino disponible
+    }
+
+    // Construir el camino en direcciones
+    string path = "";
+    int current = goal;
+
+    while (current != src) {
+        int prev_node = prev[current];
+        if (prev_node == -1) return "";  // Verificamos si hay un camino válido
+
+        int x1 = prev_node / columnas, y1 = prev_node % columnas;
+        int x2 = current / columnas, y2 = current % columnas;
+
+        if (y1 < y2) {
+            if(x1 == x2) {
+                path += "R"; // Right
+            }else if(x1 < x2){
+                path += "b"; //diagonal abajo derecha
+            }else if(x1 > x2) {
+                path += "A"; //diagonal arriba derecha
+            }
+
+        }else if (y1 > y2) {
+            if(x1 == x2) {
+                path += "L"; // Left
+            }else if(x1 < x2) {
+                path += "B"; //diagnoal abajo izquierda
+            }else if(x1 > x2) {
+                path += "a"; //diagonal arriba izquierda
+            }
+        }else if (x1 < x2) path += "D";  // Down
+        else if (x1 > x2) path += "U";  // Up
+
+
+        current = prev_node;
+    }
+
+    reverse(path.begin(), path.end());  // Revertimos el string para tenerlo en el orden correcto
+    return path;
+}
+/*
 string Graph::Dijkstra(coords inicio, coords objetivo) {
     int src = inicio.i * columnas + inicio.j;  // Convertir las coordenadas de inicio a índice
     int goal = objetivo.i * columnas + objetivo.j;  // Convertir las coordenadas de destino a índice
@@ -261,3 +341,4 @@ string Graph::Dijkstra(coords inicio, coords objetivo) {
     reverse(path.begin(), path.end());  // Revertimos el string para tenerlo en el orden correcto
     return path;
 }
+*/

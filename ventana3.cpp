@@ -17,19 +17,7 @@
 
 #include "ventana3.h"
 
-// Definimos la matriz
-const int filas = 8;
-const int columnas = 8;
-int MT[filas][columnas] = {
-    {1, 0, 1, 1, 1, 0, 1, 1},
-    {1, 1, 1, 1, 1, 1, 0, 1},
-    {1, 1, 0, 1, 1, 1, 1, 1},
-    {1, 1, 1, 0, 1, 1, 1, 1},
-    {1, 0, 1, 1, 1, 1, 0, 1},
-    {1, 1, 1, 1, 0, 1, 1, 1},
-    {1, 0, 1, 1, 1, 1, 1, 0},
-    {0, 1, 1, 1, 1, 0, 1, 1}
-};
+
 
 QTimer *timer;
 
@@ -50,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
     label1->setGeometry(0, 0, screenWidth, screenHeight); // Posición y tamaño de label1
 
     // Cargar una imagen inicial como fondo
-    QPixmap pixmap1("/home/josepa/Imágenes/Download Boxing Ring Stage Background for free.jpeg");
+    QPixmap pixmap1("../photos/box.jpeg");
     label1->setPixmap(pixmap1.scaled(label1->size(), Qt::KeepAspectRatioByExpanding));
 
     // Crear el segundo label que actuará como tablero de juego
@@ -60,46 +48,22 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
     label2->setAlignment(Qt::AlignCenter);  // Centrar el contenido
     label2->setGeometry((screenWidth - 800) / 2, (screenHeight - 500) / 2, 800, 500); // Centrar el tablero
 
-    // Crear el QGridLayout y añadirlo a label2
-    QGridLayout *gridLayout = new QGridLayout(label2);
-    gridLayout->setSpacing(0);  // Espacio entre los elementos
-
-
-    // Distribuir las celdas de forma uniforme
-    for (int i = 0; i < filas; ++i) {
-        gridLayout->setRowStretch(i, 1);  // Misma altura para cada fila
-    }
-    for (int j = 0; j < columnas; ++j) {
-        gridLayout->setColumnStretch(j, 1);  // Misma anchura para cada columna
-    }
-
-    // Cargar la imagen que se mostrará para los ceros
-    QPixmap imagenCero("/home/josepa/Escritorio/TANK_ATTACK/photos/coble2.jpeg");
-
-    // Rellenar el tablero
-    for (int i = 0; i < filas; ++i) {
-        for (int j = 0; j < columnas; ++j) {
-            QLabel *cellLabel = new QLabel();
-            cellLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-            if (MT[i][j] == 0) {
-                // Establecer la imagen escalada para que ocupe toda la casilla
-                cellLabel->setPixmap(imagenCero.scaled(
-                    cellLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-                cellLabel->setAlignment(Qt::AlignCenter);  // Alinear la imagen al centro
-            } else {
-                cellLabel->setStyleSheet("background-color: transparent;");  // Casilla vacía
-            }
-
-            // Agregar el QLabel al layout
-            gridLayout->addWidget(cellLabel, i, j);
-        }
-    }
-
-
-
     crearBordeAlrededor();
 
+    // Crear la matriz usando vectores
+    std::vector<std::vector<int>> matriz = {
+        {1, 0, 1, 1, 1, 0, 1, 1},
+        {1, 1, 1, 1, 1, 1, 0, 1},
+        {1, 1, 0, 1, 1, 1, 1, 1},
+        {1, 1, 1, 0, 1, 1, 1, 1},
+        {1, 0, 1, 1, 1, 1, 0, 1},
+        {1, 1, 1, 1, 0, 1, 1, 1},
+        {1, 0, 1, 1, 1, 1, 1, 0},
+        {0, 1, 1, 1, 1, 0, 1, 1}
+    };
+
+    // Llenar el tablero con la matriz
+    llenarTablero(matriz);
 
 
     // Crear un QLabel para el contador
@@ -131,21 +95,45 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 }
 
 
+void MainWindow::llenarTablero(const std::vector<std::vector<int>>& matriz) {
+    QGridLayout *gridLayout = new QGridLayout(label2);
+    gridLayout->setSpacing(0);
+
+    QPixmap imagenCero("../photos/coble2.jpeg");
+
+    for (int i = 0; i < matriz.size(); ++i) {
+        for (int j = 0; j < matriz[i].size(); ++j) {
+            QLabel *cellLabel = new QLabel();
+            cellLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+            if (matriz[i][j] == 0) {
+                cellLabel->setPixmap(imagenCero.scaled(
+                    cellLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                cellLabel->setAlignment(Qt::AlignCenter);
+            } else {
+                cellLabel->setStyleSheet("background-color: transparent;");
+            }
+
+            gridLayout->addWidget(cellLabel, i, j);
+        }
+    }
+}
+
 
 void MainWindow::cambiarFondo(int index) {
     // Cambiar la imagen según el índice seleccionado en el combo box
     QPixmap pixmap1;
     switch(index) {
         case 2:
-            pixmap1.load("/home/josepa/Escritorio/TANK_ATTACK/photos/jpeg");
+            pixmap1.load("../photos/jpeg");
             //pixmap2.load("/home/josepa/Imágenes/Gif background for creations.gif");
             break;
         case 1:
-            pixmap1.load("/home/josepa/Escritorio/TANK_ATTACK/photos/.gif");
+            pixmap1.load("../photos/.gif");
             //pixmap2.load("/home/josepa/Imágenes/Seaside Beach PNG Picture, Hand Drawn Cartoon Beach Seaside Elements, Beach Clipart, Beach Seaside, Beach PNG Image For Free Download.jpeg");
             break;
         case 0:
-            pixmap1.load("/home/josepa/Escritorio/TANK_ATTACK/photos/box.jpeg");
+            pixmap1.load("../photos/box.jpeg");
             //pixmap2.load("/home/josepa/Imágenes/Gif background for creations.gif");
             break;
     }

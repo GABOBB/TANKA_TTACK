@@ -18,21 +18,25 @@
 int main(int argc, char *argv[]) {
 
     vector<vector<int>> M_mapa = {
-        {1,1,1,1,1},
-        {1,1,0,0,1},
-        {1,1,0,1,1},
-        {1,1,0,1,1},
-        {1,1,0,1,1}};
-    Graph mapa = Graph(5,5);
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 1, 1, 0, 0},
+        {0, 1, 0, 1, 1, 1, 1, 0},
+        {0, 1, 1, 0, 1, 1, 1, 0},
+        {0, 0, 1, 1, 0, 0, 0, 0},
+        {0, 1, 1, 1, 0, 1, 1, 0},
+        {0, 1, 1, 1, 1, 1, 1, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0}
+    };
+    Graph mapa = Graph(M_mapa.size(),M_mapa[0].size());
     mapa.print();
     mapa.mapa_adyacencia(M_mapa);
     mapa.print();
-    coords in = coords(4,0);
-    coords out = coords(2,4 );
+    coords in = coords(1,1);
+    coords out = coords(5,5 );
 
-    cout<<mapa.Linea_Vista_tanque(in,out, true)<<endl;
+    cout<<mapa.AStar(in,out)<<endl;
 
-
+/*
 
     QApplication app(argc, argv);
 
@@ -42,6 +46,6 @@ int main(int argc, char *argv[]) {
     window.show();
 
     return app.exec();
-
-     /*  return 0;*/
+*/
+      return 0;
 }

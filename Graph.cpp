@@ -291,3 +291,94 @@ string Graph::Dijkstra(coords inicio, coords objetivo) {
     reverse(path.begin(), path.end());  // Revertimos el string para tenerlo en el orden correcto
     return path;
 }
+
+string Graph::AStar(coords in, coords out) {
+    int src = in.i * columnas + in.j;  // Convertir coordenadas de inicio a índice
+    int goal = out.i * columnas + out.j;  // Convertir destino a índice
+    int n = filas * columnas;
+
+    auto heuristica = [&](int u, int v) {
+        int x1 = u / columnas, y1 = u % columnas;
+        int x2 = v / columnas, y2 = v % columnas;
+        return abs(x1 - x2) + abs(y1 - y2);
+    };
+
+    // Inicialización de vectores
+    vector<int> dist(n, INT_MAX);       // Costo desde el inicio hasta el nodo
+    vector<int> f_score(n, INT_MAX);    // Costo total estimado (g + h)
+    vector<int> prev(n, -1);            // Nodo anterior
+    vector<bool> visitado(n, false);    // Si el nodo ha sido visitado
+    dist[src] = 0;
+    f_score[src] = heuristica(src, goal);
+
+    // Cola de prioridad para seleccionar el nodo con menor f_score (g + h)
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    pq.push({f_score[src], src});
+
+    while (!pq.empty()) {
+        int u = pq.top().second;
+        pq.pop();
+
+        if (u == goal) break;  // Si llegamos al destino, paramos
+
+        if (visitado[u]) continue;
+        visitado[u] = true;
+
+        // Expandimos los vecinos
+        for (int v = 0; v < n; ++v) {
+            if (Matriz_Adyacencia[u][v] == 1 && !visitado[v]) {
+                int newDist = dist[u] + Matriz_Adyacencia[u][v];
+
+                if (newDist < dist[v]) {
+                    dist[v] = newDist;
+                    prev[v] = u;  // Guardamos el nodo anterior
+                    f_score[v] = newDist + heuristica(v, goal);
+                    pq.push({f_score[v], v});
+                }
+            }
+        }
+    }
+
+    // Si no se encontró un camino, devolver una cadena vacía
+    if (dist[goal] == INT_MAX) {
+        return "";  // No hay camino disponible
+    }
+    // Construir el camino en direcciones
+    string path = "";
+    int current = goal;
+
+    while (current != src) {
+        int prev_node = prev[current];
+        if (prev_node == -1) return "";  // Verificamos si hay un camino válido
+
+        int x1 = prev_node / columnas, y1 = prev_node % columnas;
+        int x2 = current / columnas, y2 = current % columnas;
+
+        // Añadir las direcciones similares a tu implementación de Dijkstra
+        if (y1 < y2) {
+            if(x1 == x2) {
+                path += "R"; // Right
+            }else if(x1 < x2){
+                path += "b"; //diagonal abajo derecha
+            }else if(x1 > x2) {
+                path += "A"; //diagonal arriba derecha
+            }
+
+        }else if (y1 > y2) {
+            if(x1 == x2) {
+                path += "L"; // Left
+            }else if(x1 < x2) {
+                path += "a"; //diagnoal abajo izquierda
+            }else if(x1 > x2) {
+                path += "B"; //diagonal arriba izquierda
+            }
+        }else if (x1 < x2) path += "D";  // Down
+        else if (x1 > x2) path += "U";  // Up
+
+        current = prev_node;
+    }
+
+    reverse(path.begin(), path.end());  // Revertimos el string para tenerlo en el orden correcto
+    return path;
+}
+

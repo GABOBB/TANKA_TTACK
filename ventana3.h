@@ -11,7 +11,9 @@
 #include <QVBoxLayout>
 #include <QPixmap>
 #include <QTime>
-#include <QVector>
+#include <vector>
+
+
 class MainWindow : public QWidget {
     Q_OBJECT
 
@@ -23,6 +25,7 @@ public:
         void iniciarContador();
         void cambiarFondo(int index);
         void crearBordeAlrededor();     // Función para crear el borde alrededor del tablero
+        void llenarTablero(const std::vector<std::vector<int>>& matriz);
 
 private:
     QLabel *label1;

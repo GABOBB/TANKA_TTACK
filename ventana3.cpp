@@ -21,7 +21,7 @@
 
 QTimer *timer;
 
-MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
+MainWindow::MainWindow(std::vector<std::vector<int>> Matriz, QWidget *parent) : QWidget(parent) {
 
     // Obtener el tamaño de la pantalla
     QScreen *screen = QGuiApplication::primaryScreen();
@@ -53,18 +53,18 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 
     // Crear la matriz usando vectores
     std::vector<std::vector<int>> matriz = {
-        {1, 0, 1, 1, 1, 0, 1, 1},
-        {1, 1, 1, 1, 1, 1, 0, 1},
-        {1, 1, 0, 1, 1, 1, 1, 1},
-        {1, 1, 1, 0, 1, 1, 1, 1},
-        {1, 0, 1, 1, 1, 1, 0, 1},
-        {1, 1, 1, 1, 0, 1, 1, 1},
-        {1, 0, 1, 1, 1, 1, 1, 0},
-        {0, 1, 1, 1, 1, 0, 1, 1}
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 1, 1, 0, 0},
+        {0, 1, 0, 1, 1, 1, 1, 0},
+        {0, 1, 1, 0, 1, 1, 1, 0},
+        {0, 0, 1, 1, 1, 1, 0, 0},
+        {0, 1, 1, 1, 0, 1, 1, 0},
+        {0, 0, 1, 1, 1, 1, 1, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0}
     };
 
     // Llenar el tablero con la matriz
-    llenarTablero(matriz);
+    llenarTablero(Matriz);
 
 
     // Crear un QLabel para el contador

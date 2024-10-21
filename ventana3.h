@@ -18,7 +18,7 @@ class MainWindow : public QWidget {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(std::vector<std::vector<int>>Matriz ,QWidget *parent = nullptr);
 
     private slots:
         void actualizarContador();

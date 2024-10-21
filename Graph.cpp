@@ -108,8 +108,16 @@ void Graph::print(){
   cout << "~~~~~~~~~~~~~~~~~~~~final matriz de adyacencia~~~~~~~~~~~~~~~~~~~~" << endl;
 }
 
+string Graph::Linea_Vista_bala(coords in, coords out, bool c) {
+    string path = "";
+    coords last;
+    coords act = in;
+
+
+
+}
+
 string Graph::Linea_Vista_tanque(coords in, coords out, bool c) {
-    cout<<out.i<<" "<<out.j<<" "<<in.i<<" "<<in.j<<endl;
     std::string path = "";
     bool crashed  = c;
     int contador = 0; // Para evitar bucles infinitos
@@ -229,7 +237,7 @@ string Graph::Dijkstra(coords inicio, coords objetivo) {
 
         // Expandimos los vecinos
         for (int v = 0; v < n; ++v) {
-            if (Matriz_Adyacencia[u][v] > 0 && !visitado[v]) {
+            if (Matriz_Adyacencia[u][v] == 1 && !visitado[v]) {
                 int newDist = dist[u] + Matriz_Adyacencia[u][v];
                 if (newDist < dist[v]) {
                     dist[v] = newDist;
@@ -283,62 +291,3 @@ string Graph::Dijkstra(coords inicio, coords objetivo) {
     reverse(path.begin(), path.end());  // Revertimos el string para tenerlo en el orden correcto
     return path;
 }
-/*
-string Graph::Dijkstra(coords inicio, coords objetivo) {
-    int src = inicio.i * columnas + inicio.j;  // Convertir las coordenadas de inicio a índice
-    int goal = objetivo.i * columnas + objetivo.j;  // Convertir las coordenadas de destino a índice
-    int n = filas * columnas;
-
-    vector dist(n, INT_MAX);  // Distancias inicializadas a infinito
-    vector prev(n, -1);  // Para almacenar los predecesores
-    vector visitado(n, false);
-    dist[src] = 0;
-
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-    pq.push({0, src});
-
-    while (!pq.empty()) {
-        int u = pq.top().second;
-        pq.pop();
-
-        if (u == goal) break;  // Si llegamos al destino, paramos
-
-        if (visitado[u]) continue;
-        visitado[u] = true;
-
-        for (int v = 0; v < n; ++v) {
-            if (Matriz_Adyacencia[u][v] == 1 && !visitado[v]) {
-                int newDist = dist[u] + Matriz_Adyacencia[u][v];
-                if (newDist < dist[v]) {
-                    dist[v] = newDist;
-                    prev[v] = u;  // Guardamos el nodo anterior
-                    pq.push({dist[v], v});
-                }
-            }
-        }
-    }
-    // Si no se encontró un camino, devolver una cadena vacía
-    if (dist[goal] == INT_MAX) {
-        return "";  // No hay camino disponible
-    }
-    // Construir el camino en direcciones
-    string path = "";
-    int current = goal;
-
-    while (current != src && prev[current] != -1) {
-        int prev_node = prev[current];
-        int x1 = prev_node / columnas, y1 = prev_node % columnas;
-        int x2 = current / columnas, y2 = current % columnas;
-
-        if (x1 < x2) path += "D";  // Down
-        else if (x1 > x2) path += "U";  // Up
-        else if (y1 < y2) path += "R";  // Right
-        else if (y1 > y2) path += "L";  // Left
-
-        current = prev_node;
-    }
-
-    reverse(path.begin(), path.end());  // Revertimos el string para tenerlo en el orden correcto
-    return path;
-}
-*/

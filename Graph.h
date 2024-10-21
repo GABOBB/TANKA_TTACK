@@ -18,6 +18,7 @@
 using namespace std;
 struct coords {
     int i, j;
+    coords()= default;
     coords(int i, int j) : i(i), j(j) {}
 };
 
@@ -35,7 +36,7 @@ public:
         void mapa_adyacencia(vector<vector<int>>& mapa);
         void adyacencia_mapa();
 
-        string Linea_Vista(coords in,coords out,bool chocado);
+        string Linea_Vista_bala(coords in,coords out,bool c);
         string Linea_Vista_tanque(coords in,coords out, bool c);
         string Dijkstra(coords in, coords out);
 

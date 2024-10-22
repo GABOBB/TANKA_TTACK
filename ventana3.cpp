@@ -200,6 +200,10 @@ void MainWindow::agregarTanques(const std::vector<std::vector<int>> &matriz) {
     crearLabelTanque(P.fila[6],P.columna[6],rutaTanqueCeleste,"tanque Celeste 1");
     crearLabelTanque(P.fila[7],P.columna[7],rutaTanqueCeleste,"tanque Celeste 2");
 
+    for(int i=0;i<8;i++) {
+        Matriz[P.fila[i]][P.columna[i]] = 2;
+    }
+
  /*
     // Buscar las posiciones válidas
     Posicion posRojo = buscarEspacio(matriz, 1, 2);

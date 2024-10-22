@@ -19,6 +19,7 @@
 
 #include "ventana3.h"
 
+#include <iostream>
 
 
 QTimer *timer;
@@ -176,9 +177,10 @@ void MainWindow::crearBordeAlrededor() {
     bordeDerecho->setGeometry(label2->x() + label2->width(), label2->y(), espesor, label2->height());
     bordeDerecho->setStyleSheet("background-color: black;");
 }
-
+using namespace std;
 void MainWindow::agregarTanques(const std::vector<std::vector<int>> &matriz) {
     Posicion P = buscarEspacio();
+
 
     // Rutas de las imágenes de los tanques
     QString rutaTanqueRojo = "../photos/tanque_rojo.png";
@@ -189,16 +191,16 @@ void MainWindow::agregarTanques(const std::vector<std::vector<int>> &matriz) {
     crearLabelTanque(P.fila[0],P.columna[0],rutaTanqueRojo,"tanque Rojo 1");
     crearLabelTanque(P.fila[1],P.columna[1],rutaTanqueRojo,"tanque Rojo 2");
 
-    crearLabelTanque(P.fila[2],P.columna[2],rutaTanqueRojo,"tanque Azul 1");
-    crearLabelTanque(P.fila[3],P.columna[3],rutaTanqueRojo,"tanque Azul 2");
+    crearLabelTanque(P.fila[2],P.columna[2],rutaTanqueAzul,"tanque Azul 1");
+    crearLabelTanque(P.fila[3],P.columna[3],rutaTanqueAzul,"tanque Azul 2");
 
-    crearLabelTanque(P.fila[4],P.columna[4],rutaTanqueRojo,"tanque Amarillo 1");
-    crearLabelTanque(P.fila[5],P.columna[5],rutaTanqueRojo,"tanque Amarilla 2");
+    crearLabelTanque(P.fila[4],P.columna[4],rutaTanqueAmarillo,"tanque Amarillo 1");
+    crearLabelTanque(P.fila[5],P.columna[5],rutaTanqueAmarillo,"tanque Amarilla 2");
 
-    crearLabelTanque(P.fila[6],P.columna[6],rutaTanqueRojo,"tanque Celeste 1");
-    crearLabelTanque(P.fila[7],P.columna[7],rutaTanqueRojo,"tanque Celeste 2");
+    crearLabelTanque(P.fila[6],P.columna[6],rutaTanqueCeleste,"tanque Celeste 1");
+    crearLabelTanque(P.fila[7],P.columna[7],rutaTanqueCeleste,"tanque Celeste 2");
 
-    /*
+ /*
     // Buscar las posiciones válidas
     Posicion posRojo = buscarEspacio(matriz, 1, 2);
     Posicion posAzul = buscarEspacio(matriz, 1, 2, posRojo.fila);
@@ -247,8 +249,8 @@ Posicion MainWindow::buscarEspacio() {
             }
         }
     }
-    for(int x=Matriz.size()-2; x<Matriz.size(); x++) {
-        for(int i=0; i>Matriz.size(); i++) {
+    for(int x=Matriz[0].size()-2; x<Matriz[0].size(); x++) {
+        for(int i=1; i<Matriz.size(); i++) {
             if(Matriz[i][x] == 1 && contador<8) {
                 p.fila[contador] = i;
                 p.columna[contador] = x;

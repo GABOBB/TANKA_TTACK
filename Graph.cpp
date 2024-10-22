@@ -64,11 +64,12 @@ void Graph::mapa_adyacencia(vector<vector<int>>& mapa){
 
 
 void Graph::adyacencia_mapa(){
-  int Matriz_Mapa[filas][columnas] = {{0,0,0,0,0},
-                                     {0,0,0,0,0},
-                                     {0,0,0,0,0},
-                                     {0,0,0,0,0},
-                                     {0,0,0,0,0}};
+      //int Matriz_Mapa[filas][columnas] = {{0,0,0,0,0},
+        //                                 {0,0,0,0,0},
+          //                               {0,0,0,0,0},
+            //                             {0,0,0,0,0},
+              //                           {0,0,0,0,0}};
+    vector<vector<int>> Matriz_Mapa;
   for(int i = 0; i < filas*columnas; i++){
     for(int j = 0; j < filas*columnas; j++){
       if(Matriz_Adyacencia[i][j] == 1){
@@ -211,6 +212,7 @@ string Graph::Linea_Vista_tanque(coords in, coords out, bool c) {
     }
     return path;
 }
+
 string Graph::Dijkstra(coords inicio, coords objetivo) {
     int src = inicio.i * columnas + inicio.j;  // Convertir coordenadas de inicio a índice
     int goal = objetivo.i * columnas + objetivo.j;  // Convertir destino a índice
@@ -270,7 +272,7 @@ string Graph::Dijkstra(coords inicio, coords objetivo) {
             }else if(x1 < x2){
                 path += "b"; //diagonal abajo derecha
             }else if(x1 > x2) {
-                path += "A"; //diagonal arriba derecha
+                path += "a"; //diagonal arriba derecha
             }
 
         }else if (y1 > y2) {
@@ -279,7 +281,7 @@ string Graph::Dijkstra(coords inicio, coords objetivo) {
             }else if(x1 < x2) {
                 path += "B"; //diagnoal abajo izquierda
             }else if(x1 > x2) {
-                path += "a"; //diagonal arriba izquierda
+                path += "A"; //diagonal arriba izquierda
             }
         }else if (x1 < x2) path += "D";  // Down
         else if (x1 > x2) path += "U";  // Up
@@ -361,16 +363,16 @@ string Graph::AStar(coords in, coords out) {
             }else if(x1 < x2){
                 path += "b"; //diagonal abajo derecha
             }else if(x1 > x2) {
-                path += "A"; //diagonal arriba derecha
+                path += "a"; //diagonal arriba derecha
             }
 
         }else if (y1 > y2) {
             if(x1 == x2) {
                 path += "L"; // Left
             }else if(x1 < x2) {
-                path += "a"; //diagnoal abajo izquierda
+                path += "B"; //diagnoal abajo izquierda
             }else if(x1 > x2) {
-                path += "B"; //diagonal arriba izquierda
+                path += "A"; //diagonal arriba izquierda
             }
         }else if (x1 < x2) path += "D";  // Down
         else if (x1 > x2) path += "U";  // Up

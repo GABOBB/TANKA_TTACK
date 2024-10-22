@@ -26,7 +26,7 @@ std::vector<std::vector<int>> generate_Mapa() {
     for (int i = 1; i < M_mapa.size()-1; i++) {
         for (int j = 1; j < M_mapa[0].size()-1; j++) {
             int ranInt = (rand() % 100) + 1;
-            if(ranInt>15) {
+            if(ranInt>=15) {
                 M_mapa[i][j] = 1;
             }
         }
@@ -39,13 +39,13 @@ int main(int argc, char *argv[]) {
 
     vector<vector<int>> M_mapa = generate_Mapa();
     Graph mapa = Graph(M_mapa.size(),M_mapa[0].size());
-    mapa.print();
+    //mapa.print();
     mapa.mapa_adyacencia(M_mapa);
-    mapa.print();
+    //mapa.print();
     coords in = coords(1,1);
-    coords out = coords(5,5 );
+    coords out = coords(6,12);
 
-    cout<<mapa.AStar(in,out)<<endl;
+    cout<<mapa.Dijkstra(in,out)<<endl;
 
 
 

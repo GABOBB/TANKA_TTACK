@@ -263,28 +263,24 @@ Posicion MainWindow::buscarEspacio() {
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event) {
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect screenGeometry = screen->geometry();
+    int screenWidth = screenGeometry.width();
+    int screenHeight = screenGeometry.height();
+
     // También puedes obtener la posición del clic
-    int x = event->x();int y = event->y();qDebug() << "Clic detectado en posición: (" << x << ", " << y << ")"<<tanques.size();
-
+    int x =(event->x()) - (screenWidth-800)/2; int y =(event->y())-(screenHeight-500)/2; qDebug() << "Clic detectado en posición: (" << x << ", " << y << ")"<<tanques.size();
+    cout<<x;
     for (QLabel* tanque : tanques) {
-        qDebug() << label1->geometry()<<" "<<tanque->geometry()<<" "<<event->pos()<<endl;
-
-        if (tanque->geometry().x() < x && tanque->geometry().x()+37 > x && tanque->geometry().y() > y && tanque->geometry().y()+37 > y) {
-            qDebug() << "Se presionó el tanque~~~~~~~~~~~~~: " << tanque->toolTip();
-            // Aquí puedes agregar lógica adicional para manejar el clic en el tanque
+        //qDebug() << label1->geometry()<<" "<<tanque->geometry()<<" "<<event->pos()<<endl;
+        if(tanque->geometry().contains(x,y)) {
+            qDebug() << tanque->toolTip();
         }
     }
-    // Si quieres detectar un clic dentro de un QLabel específico, por ejemplo en el label2
-    //if (label2->geometry().contains(event->pos())) {
 
-        // Verificar si el clic fue izquierdo o derecho
+
         //if (event->button() == Qt::LeftButton) {
-       //     qDebug() << "Clic izquierdo en el tablero (label2)";
-       // } else if (event->button() == Qt::RightButton) {
-      //      qDebug() << "Clic derecho en el tablero (label2)";
-       // }
-   // }
 
-    // Llamar al evento original si es necesario
+       // } else if (event->button() == Qt::RightButton) {
     QWidget::mousePressEvent(event);
 }

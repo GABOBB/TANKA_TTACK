@@ -36,17 +36,20 @@ std::vector<std::vector<int>> generate_Mapa() {
 
 
 int main(int argc, char *argv[]) {
-    /*
-        Graph mapa = Graph(M_mapa.size(),M_mapa[0].size());
+
+    vector<vector<int>> M_mapa = generate_Mapa();
+
+    /**/
+    Graph mapa = Graph(M_mapa.size(),M_mapa[0].size());
     //mapa.print();
     mapa.mapa_adyacencia(M_mapa);
     //mapa.print();
     coords in = coords(1,1);
-    coords out = coords(6,12);
+    coords out = coords(1,12);
 
     cout<<mapa.Dijkstra(in,out)<<endl;
-    */
-    vector<vector<int>> M_mapa = generate_Mapa();
+
+
 
 
     QApplication app(argc, argv);

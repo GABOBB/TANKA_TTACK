@@ -182,7 +182,6 @@ using namespace std;
 void MainWindow::agregarTanques(const std::vector<std::vector<int>> &matriz) {
     Posicion P = buscarEspacio();
 
-
     // Rutas de las imágenes de los tanques
     QString rutaTanqueRojo = "../photos/tanque_rojo.png";
     QString rutaTanqueAzul = "../photos/tanque_azul.png";
@@ -269,18 +268,19 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
     int screenHeight = screenGeometry.height();
 
     // También puedes obtener la posición del clic
-    int x =(event->x()) - (screenWidth-800)/2; int y =(event->y())-(screenHeight-500)/2; qDebug() << "Clic detectado en posición: (" << x << ", " << y << ")"<<tanques.size();
-    cout<<x;
+    int x =(event->x()) - (screenWidth-800)/2; int y =(event->y())-(screenHeight-500)/2;
+    qDebug() << "Clic detectado en posición: (" << x << ", " << y << ")"<<tanques.size();
+
     for (QLabel* tanque : tanques) {
-        //qDebug() << label1->geometry()<<" "<<tanque->geometry()<<" "<<event->pos()<<endl;
         if(tanque->geometry().contains(x,y)) {
-            qDebug() << tanque->toolTip();
+            if (event->button() == Qt::LeftButton) {
+                qDebug() << tanque->toolTip();
+            }else if (event->button() == Qt::RightButton) {
+
+            }
         }
     }
 
 
-        //if (event->button() == Qt::LeftButton) {
-
-       // } else if (event->button() == Qt::RightButton) {
     QWidget::mousePressEvent(event);
 }

@@ -40,9 +40,8 @@ public:
         string Linea_Vista_tanque(coords in,coords out, bool c);
         string Dijkstra(coords in, coords out);
         string AStar(coords in, coords out);
-
-        void BFS(int in, int out);
-        void Dijkstra(int in, int out);
+        string BFS(coords in, coords out);
+//
 };
 
 

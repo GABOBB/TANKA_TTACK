@@ -28,9 +28,6 @@ Graph::Graph(int x, int y){
     Matriz_Adyacencia = vector<vector<int>>(n,vector<int>(n,0));
 }
 
-
-
-
 void Graph::mapa_adyacencia(vector<vector<int>>& mapa){
    // int MT[filas][columnas] = {
    //     {1,1,1,1,1},
@@ -58,10 +55,6 @@ void Graph::mapa_adyacencia(vector<vector<int>>& mapa){
         }
     }
 };
-
-
-
-
 
 void Graph::adyacencia_mapa(){
       //int Matriz_Mapa[filas][columnas] = {{0,0,0,0,0},
@@ -376,6 +369,73 @@ string Graph::AStar(coords in, coords out) {
             }
         }else if (x1 < x2) path += "D";  // Down
         else if (x1 > x2) path += "U";  // Up
+
+        current = prev_node;
+    }
+
+    reverse(path.begin(), path.end());  // Revertimos el string para tenerlo en el orden correcto
+    return path;
+}
+
+string Graph::BFS(coords in, coords out) {
+    int src = in.i * columnas + in.j;  // Convertir coordenadas de inicio a índice
+    int goal = out.i * columnas + out.j;  // Convertir destino a índice
+    int n = filas * columnas;
+
+    // Inicialización de estructuras
+    vector<int> dist(n, INT_MAX);  // Distancia desde el inicio
+    vector<int> prev(n, -1);       // Nodo anterior para reconstruir el camino
+    vector<bool> visitado(n, false); // Si el nodo ha sido visitado
+    dist[src] = 0;
+
+    // Cola para implementar BFS
+    queue<int> q;
+    q.push(src);
+    visitado[src] = true;
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        if (u == goal) break;  // Si llegamos al destino, paramos
+
+        // Expandimos los vecinos
+        for (int v = 0; v < n; ++v) {
+            if (Matriz_Adyacencia[u][v] == 1 && !visitado[v]) {
+                visitado[v] = true;
+                prev[v] = u;
+                q.push(v);
+            }
+        }
+    }
+
+    // Si no se encontró un camino, devolver una cadena vacía
+    if (!visitado[goal]) {
+        return "";  // No hay camino disponible
+    }
+
+    // Construir el camino en direcciones
+    string path = "";
+    int current = goal;
+
+    while (current != src) {
+        int prev_node = prev[current];
+        if (prev_node == -1) return "";  // Verificamos si hay un camino válido
+
+        int x1 = prev_node / columnas, y1 = prev_node % columnas;
+        int x2 = current / columnas, y2 = current % columnas;
+
+        // Añadir las direcciones similares a AStar
+        if (y1 > y2) {
+            if (x1 == x2) path += "R"; // Right
+            else if (x1 > x2) path += "B"; // Diagonal abajo derecha
+            else if (x1 < x2) path += "A"; // Diagonal arriba derecha
+        } else if (y1 < y2) {
+            if (x1 == x2) path += "L"; // Left
+            else if (x1 > x2) path += "b"; // Diagonal abajo izquierda
+            else if (x1 < x2) path += "a"; // Diagonal arriba izquierda
+        } else if (x1 > x2) path += "D"; // Down
+        else if (x1 < x2) path += "U"; // Up
 
         current = prev_node;
     }

@@ -13,6 +13,8 @@
 #include <QTimer>
 #include <QTime>
 #include <QPushButton>
+#include <QDebug>
+
 
 
 #include "ventana3.h"
@@ -22,7 +24,7 @@
 QTimer *timer;
 
 MainWindow::MainWindow(std::vector<std::vector<int>> Matriz, QWidget *parent) : QWidget(parent) {
-
+    this->Matriz = Matriz;
     // Obtener el tamaño de la pantalla
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect screenGeometry = screen->geometry();
@@ -50,21 +52,9 @@ MainWindow::MainWindow(std::vector<std::vector<int>> Matriz, QWidget *parent) : 
 
 
     crearBordeAlrededor();
-
-    // Crear la matriz usando vectores
-    std::vector<std::vector<int>> matriz = {
-        {0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 1, 1, 1, 1, 1, 0, 0},
-        {0, 1, 0, 1, 1, 1, 1, 0},
-        {0, 1, 1, 0, 1, 1, 1, 0},
-        {0, 0, 1, 1, 1, 1, 0, 0},
-        {0, 1, 1, 1, 0, 1, 1, 0},
-        {0, 0, 1, 1, 1, 1, 1, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0}
-    };
-
     // Llenar el tablero con la matriz
     llenarTablero(Matriz);
+    agregarTanques(Matriz);
 
 
     // Crear un QLabel para el contador
@@ -112,7 +102,7 @@ void MainWindow::llenarTablero(const std::vector<std::vector<int>>& matriz) {
                     cellLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 cellLabel->setAlignment(Qt::AlignCenter);
             } else {
-                cellLabel->setStyleSheet("background-color: transparent;");
+                cellLabel->setStyleSheet("background-color: transparent;");  // Asegurarse de que no haya fondo
             }
 
             gridLayout->addWidget(cellLabel, i, j);
@@ -181,8 +171,90 @@ void MainWindow::crearBordeAlrededor() {
     bordeIzquierdo->setGeometry(label2->x() - espesor, label2->y(), espesor, label2->height());
     bordeIzquierdo->setStyleSheet("background-color: black;");
 
-    // Crear el borde derecho
+    // Crear el borde agregarTanquesderecho
     bordeDerecho = new QLabel(this);
     bordeDerecho->setGeometry(label2->x() + label2->width(), label2->y(), espesor, label2->height());
     bordeDerecho->setStyleSheet("background-color: black;");
+}
+
+void MainWindow::agregarTanques(const std::vector<std::vector<int>> &matriz) {
+    Posicion P = buscarEspacio();
+
+    // Rutas de las imágenes de los tanques
+    QString rutaTanqueRojo = "../photos/tanque_rojo.png";
+    QString rutaTanqueAzul = "../photos/tanque_azul.png";
+    QString rutaTanqueAmarillo = "../photos/tanque_amarillo.png";
+    QString rutaTanqueCeleste = "../photos/tanque_celeste.png";
+
+    crearLabelTanque(P.fila[0],P.columna[0],rutaTanqueRojo,"tanque Rojo 1");
+    crearLabelTanque(P.fila[1],P.columna[1],rutaTanqueRojo,"tanque Rojo 2");
+
+    crearLabelTanque(P.fila[2],P.columna[2],rutaTanqueRojo,"tanque Azul 1");
+    crearLabelTanque(P.fila[3],P.columna[3],rutaTanqueRojo,"tanque Azul 2");
+
+    crearLabelTanque(P.fila[4],P.columna[4],rutaTanqueRojo,"tanque Amarillo 1");
+    crearLabelTanque(P.fila[5],P.columna[5],rutaTanqueRojo,"tanque Amarilla 2");
+
+    crearLabelTanque(P.fila[6],P.columna[6],rutaTanqueRojo,"tanque Celeste 1");
+    crearLabelTanque(P.fila[7],P.columna[7],rutaTanqueRojo,"tanque Celeste 2");
+
+    /*
+    // Buscar las posiciones válidas
+    Posicion posRojo = buscarEspacio(matriz, 1, 2);
+    Posicion posAzul = buscarEspacio(matriz, 1, 2, posRojo.fila);
+    Posicion posAmarillo = buscarEspacio(matriz, matriz[0].size() - 3, matriz[0].size() - 1);
+    Posicion posCeleste = buscarEspacio(matriz, matriz[0].size() - 3, matriz[0].size() - 1, posAmarillo.fila);
+
+    // Crear los labels solo si las posiciones son válidas
+    if (posRojo.fila != -1) crearLabelTanque(posRojo, rutaTanqueRojo, "Tanque Rojo");
+    if (posAzul.fila != -1) crearLabelTanque(posAzul, rutaTanqueAzul, "Tanque Azul");
+    if (posAmarillo.fila != -1) crearLabelTanque(posAmarillo, rutaTanqueAmarillo, "Tanque Amarillo");
+    if (posCeleste.fila != -1) crearLabelTanque(posCeleste, rutaTanqueCeleste, "Tanque Celeste");
+    */
+}
+
+void MainWindow::crearLabelTanque(int i,int j, const QString &rutaImagen, const QString &nombre) {
+    QLabel *labelTanque = new QLabel();  // Crear el QLabel para el tanque
+    QPixmap pixmap(rutaImagen);
+
+    labelTanque->setPixmap(pixmap.scaled(50, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    labelTanque->setAlignment(Qt::AlignCenter);
+    labelTanque->setToolTip(nombre);
+
+    // Establecer un fondo para hacer el tanque visible
+    labelTanque->setStyleSheet("background-color: transparent;"); // Cambiar a "white" si es necesario
+
+    // Asegurarse de que el layout está correctamente asignado
+    QGridLayout *gridLayout = qobject_cast<QGridLayout *>(label2->layout());
+    if (gridLayout) {
+        gridLayout->addWidget(labelTanque, i, j);
+    } else {
+        qDebug() << "Error: No se pudo acceder al QGridLayout.";
+    }
+}
+
+
+
+Posicion MainWindow::buscarEspacio() {
+    int contador = 0;
+    Posicion p;
+    for(int x=1;x<3;x++) {
+        for(int i=1; i<this->Matriz.size(); i++) {
+            if(Matriz[i][x] == 1 && contador<4){
+                p.fila[contador] = i;
+                p.columna[contador] = x;
+                contador++;
+            }
+        }
+    }
+    for(int x=Matriz.size()-2; x<Matriz.size(); x++) {
+        for(int i=0; i>Matriz.size(); i++) {
+            if(Matriz[i][x] == 1 && contador<8) {
+                p.fila[contador] = i;
+                p.columna[contador] = x;
+                contador++;
+            }
+        }
+    }
+    return p;
 }

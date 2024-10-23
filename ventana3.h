@@ -12,10 +12,15 @@
 #include <QPixmap>
 #include <QTime>
 #include <vector>
-
+using namespace std;
+struct Posicion {
+    int fila[8];
+    int columna[8];
+};
 
 class MainWindow : public QWidget {
     Q_OBJECT
+    vector<vector<int>> Matriz;
 
 public:
     MainWindow(std::vector<std::vector<int>>Matriz ,QWidget *parent = nullptr);
@@ -26,6 +31,12 @@ public:
         void cambiarFondo(int index);
         void crearBordeAlrededor();     // Función para crear el borde alrededor del tablero
         void llenarTablero(const std::vector<std::vector<int>>& matriz);
+    // Nuevos métodos para manejar los tanques
+        void agregarTanques(const std::vector<std::vector<int>> &matriz);  // Añadir los labels de los tanques
+    // Definir valor por defecto aquí (en el .h)
+        Posicion buscarEspacio();
+
+        void crearLabelTanque(int i,int j, const QString &rutaImagen, const QString &nombre);
 
 private:
     QLabel *label1;
@@ -36,6 +47,8 @@ private:
     QLabel *bordeInferior;          // QLabel para el borde inferior
     QLabel *bordeIzquierdo;         // QLabel para el borde izquierdo
     QLabel *bordeDerecho;           // QLabel para el borde derecho
+
+
 
 
 };

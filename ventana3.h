@@ -24,6 +24,7 @@ struct Posicion {
 class MainWindow : public QWidget {
     Q_OBJECT
     vector<vector<int>> Matriz;
+    vector<QLabel*> tanques;
 
 public:
     MainWindow(std::vector<std::vector<int>>Matriz ,QWidget *parent = nullptr);

@@ -223,11 +223,12 @@ void MainWindow::crearLabelTanque(int i,int j, const QString &rutaImagen, const 
 
     // Establecer un fondo para hacer el tanque visible
     labelTanque->setStyleSheet("background-color: transparent;"); // Cambiar a "white" si es necesario
-
+    tanques.push_back(labelTanque);
     // Asegurarse de que el layout está correctamente asignado
     QGridLayout *gridLayout = qobject_cast<QGridLayout *>(label2->layout());
     if (gridLayout) {
         gridLayout->addWidget(labelTanque, i, j);
+
     } else {
         qDebug() << "Error: No se pudo acceder al QGridLayout.";
     }
@@ -262,18 +263,27 @@ Posicion MainWindow::buscarEspacio() {
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event) {
-    // Imprimir mensaje cuando se detecta un clic
-    qDebug() << "hola";
-
     // También puedes obtener la posición del clic
-    int x = event->x();
-    int y = event->y();
-    qDebug() << "Clic detectado en posición: (" << x << ", " << y << ")";
+    int x = event->x();int y = event->y();qDebug() << "Clic detectado en posición: (" << x << ", " << y << ")"<<tanques.size();
 
-    // Si quieres detectar un clic dentro de un QLabel específico, por ejemplo en el label2
-    if (label2->geometry().contains(event->pos())) {
-        qDebug() << "¡Clic en el tablero!";
+    for (QLabel* tanque : tanques) {
+        qDebug() << label1->geometry()<<" "<<tanque->geometry()<<" "<<event->pos()<<endl;
+
+        if (tanque->geometry().x() < x && tanque->geometry().x()+37 > x && tanque->geometry().y() > y && tanque->geometry().y()+37 > y) {
+            qDebug() << "Se presionó el tanque~~~~~~~~~~~~~: " << tanque->toolTip();
+            // Aquí puedes agregar lógica adicional para manejar el clic en el tanque
+        }
     }
+    // Si quieres detectar un clic dentro de un QLabel específico, por ejemplo en el label2
+    //if (label2->geometry().contains(event->pos())) {
+
+        // Verificar si el clic fue izquierdo o derecho
+        //if (event->button() == Qt::LeftButton) {
+       //     qDebug() << "Clic izquierdo en el tablero (label2)";
+       // } else if (event->button() == Qt::RightButton) {
+      //      qDebug() << "Clic derecho en el tablero (label2)";
+       // }
+   // }
 
     // Llamar al evento original si es necesario
     QWidget::mousePressEvent(event);

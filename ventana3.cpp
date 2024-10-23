@@ -14,6 +14,7 @@
 #include <QTime>
 #include <QPushButton>
 #include <QDebug>
+#include <QMouseEvent>
 
 
 
@@ -204,19 +205,12 @@ void MainWindow::agregarTanques(const std::vector<std::vector<int>> &matriz) {
         Matriz[P.fila[i]][P.columna[i]] = 2;
     }
 
- /*
-    // Buscar las posiciones válidas
-    Posicion posRojo = buscarEspacio(matriz, 1, 2);
-    Posicion posAzul = buscarEspacio(matriz, 1, 2, posRojo.fila);
-    Posicion posAmarillo = buscarEspacio(matriz, matriz[0].size() - 3, matriz[0].size() - 1);
-    Posicion posCeleste = buscarEspacio(matriz, matriz[0].size() - 3, matriz[0].size() - 1, posAmarillo.fila);
-
-    // Crear los labels solo si las posiciones son válidas
-    if (posRojo.fila != -1) crearLabelTanque(posRojo, rutaTanqueRojo, "Tanque Rojo");
-    if (posAzul.fila != -1) crearLabelTanque(posAzul, rutaTanqueAzul, "Tanque Azul");
-    if (posAmarillo.fila != -1) crearLabelTanque(posAmarillo, rutaTanqueAmarillo, "Tanque Amarillo");
-    if (posCeleste.fila != -1) crearLabelTanque(posCeleste, rutaTanqueCeleste, "Tanque Celeste");
-    */
+    for(int i=0;i<Matriz.size();i++) {
+        for(int j=0;j<Matriz[i].size();j++) {
+            cout<<Matriz[i][j]<<" ";
+        }
+        cout<<endl;
+    }
 }
 
 void MainWindow::crearLabelTanque(int i,int j, const QString &rutaImagen, const QString &nombre) {
@@ -239,7 +233,9 @@ void MainWindow::crearLabelTanque(int i,int j, const QString &rutaImagen, const 
     }
 }
 
+void MainWindow::tanqueClicked(const QString &nombre) {
 
+}
 
 Posicion MainWindow::buscarEspacio() {
     int contador = 0;
@@ -263,4 +259,22 @@ Posicion MainWindow::buscarEspacio() {
         }
     }
     return p;
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *event) {
+    // Imprimir mensaje cuando se detecta un clic
+    qDebug() << "hola";
+
+    // También puedes obtener la posición del clic
+    int x = event->x();
+    int y = event->y();
+    qDebug() << "Clic detectado en posición: (" << x << ", " << y << ")";
+
+    // Si quieres detectar un clic dentro de un QLabel específico, por ejemplo en el label2
+    if (label2->geometry().contains(event->pos())) {
+        qDebug() << "¡Clic en el tablero!";
+    }
+
+    // Llamar al evento original si es necesario
+    QWidget::mousePressEvent(event);
 }

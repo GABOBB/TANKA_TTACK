@@ -12,6 +12,9 @@
 #include <QPixmap>
 #include <QTime>
 #include <vector>
+#include <QMouseEvent>
+
+
 using namespace std;
 struct Posicion {
     int fila[8];
@@ -37,6 +40,9 @@ public:
         Posicion buscarEspacio();
 
         void crearLabelTanque(int i,int j, const QString &rutaImagen, const QString &nombre);
+        void tanqueClicked(const QString &nombre);
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
 
 private:
     QLabel *label1;

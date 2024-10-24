@@ -376,7 +376,82 @@ string Graph::AStar(coords in, coords out) {
     reverse(path.begin(), path.end());  // Revertimos el string para tenerlo en el orden correcto
     return path;
 }
+string Graph::BFS(coords in, coords out) {
 
+    int src = in.i * columnas + in.j;  // Convertir coordenadas de inicio a índice
+    int goal = out.i * columnas + out.j;  // Convertir destino a índice
+    int n = filas * columnas;
+
+    // Inicialización de estructuras
+    vector<int> dist(n, INT_MAX);  // Distancia desde el inicio
+    vector<int> prev(n, -1);       // Nodo anterior para reconstruir el camino
+    vector<bool> visitado(n, false); // Si el nodo ha sido visitado
+    dist[src] = 0;
+
+    // Cola para implementar BFS
+    queue<int> q;
+    q.push(src);
+    visitado[src] = true;
+
+    while (!q.empty()) {
+        int u = q.front();
+        q.pop();
+
+        if (u == goal) break;  // Si llegamos al destino, paramos
+
+        // Expandimos los vecinos
+        for (int v = 0; v < n; ++v) {
+            if (Matriz_Adyacencia[u][v] == 1 && !visitado[v]) {
+                visitado[v] = true;
+                prev[v] = u;
+                q.push(v);
+            }
+        }
+    }
+
+    // Si no se encontró un camino, devolver un vector vacío
+    if (!visitado[goal]) {
+        return {};  // No hay camino disponible
+    }
+
+    // Reconstrucción del camino
+    vector<int> VectorPath;
+    for (int at = goal; at != -1; at = prev[at]) {
+        VectorPath.push_back(at);
+    }
+    reverse(VectorPath.begin(), VectorPath.end());  // El camino está en orden inverso
+    string path = "";
+    for (size_t i = 1; i < VectorPath.size(); ++i) {
+        int current = VectorPath[i - 1];
+        int next = VectorPath[i];
+        int current_i = current / columnas, current_j = current % columnas;
+        int next_i = next / columnas, next_j = next % columnas;
+
+        // Comparar las coordenadas para determinar el movimiento
+        if (next_i == current_i && next_j == current_j + 1) {
+            path += "R";  // Derecha
+        } else if (next_i == current_i && next_j == current_j - 1) {
+            path += "L";  // Izquierda
+        } else if (next_i == current_i + 1 && next_j == current_j) {
+            path += "D";  // Abajo
+        } else if (next_i == current_i - 1 && next_j == current_j) {
+            path += "U";  // Arriba
+        } else if (next_i == current_i + 1 && next_j == current_j + 1) {
+            path += "b"; // Diagonal derecha abajo
+        } else if (next_i == current_i - 1 && next_j == current_j + 1) {
+            path += "a"; // Diagonal derecha arriba
+        } else if (next_i == current_i + 1 && next_j == current_j - 1) {
+            path += "B"; // Diagonal izquierda abajo
+        } else if (next_i == current_i - 1 && next_j == current_j - 1) {
+            path += "A"; // Diagonal izquierda arriba
+        }
+    }
+        return path;  // Devolver el camino como un vector de índices
+
+
+}
+
+/*
 string Graph::BFS(coords in, coords out) {
     int src = in.i * columnas + in.j;  // Convertir coordenadas de inicio a índice
     int goal = out.i * columnas + out.j;  // Convertir destino a índice
@@ -443,4 +518,4 @@ string Graph::BFS(coords in, coords out) {
     reverse(path.begin(), path.end());  // Revertimos el string para tenerlo en el orden correcto
     return path;
 }
-
+*/

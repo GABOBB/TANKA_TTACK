@@ -266,18 +266,22 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
     QRect screenGeometry = screen->geometry();
     int screenWidth = screenGeometry.width();
     int screenHeight = screenGeometry.height();
-
+    QRect tempTank = tanques[0]->geometry();
     // También puedes obtener la posición del clic
     int x =(event->x()) - (screenWidth-800)/2; int y =(event->y())-(screenHeight-500)/2;
-    qDebug() << "Clic detectado en posición: (" << x << ", " << y << ")"<<tanques.size();
-
+    qDebug() << "Clic detectado en posición: (" << x << ", " << y << ")"<<tanques[0]->geometry();
+    int x2 = x/tempTank.width(); int y2 = y/tempTank.height();
+    qDebug() << x2<<"~"<<y2;
     for (QLabel* tanque : tanques) {
         if(tanque->geometry().contains(x,y)) {
             if (event->button() == Qt::LeftButton) {
                 qDebug() << tanque->toolTip();
+
             }else if (event->button() == Qt::RightButton) {
 
             }
+        }else {
+
         }
     }
 

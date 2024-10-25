@@ -57,12 +57,8 @@ void Graph::mapa_adyacencia(vector<vector<int>>& mapa){
 };
 
 void Graph::adyacencia_mapa(){
-      //int Matriz_Mapa[filas][columnas] = {{0,0,0,0,0},
-        //                                 {0,0,0,0,0},
-          //                               {0,0,0,0,0},
-            //                             {0,0,0,0,0},
-              //                           {0,0,0,0,0}};
-    vector<vector<int>> Matriz_Mapa;
+    vector<vector<int>> Matriz_Mapa(filas, vector<int>(columnas, 0));
+    //vector<vector<int>> Matriz_Mapa;
   for(int i = 0; i < filas*columnas; i++){
     for(int j = 0; j < filas*columnas; j++){
       if(Matriz_Adyacencia[i][j] == 1){

@@ -28,34 +28,32 @@ Graph::Graph(int x, int y){
     Matriz_Adyacencia = vector<vector<int>>(n,vector<int>(n,0));
 }
 
-void Graph::mapa_adyacencia(vector<vector<int>>& mapa){
-   // int MT[filas][columnas] = {
-   //     {1,1,1,1,1},
-   //     {1,1,1,1,1},
-   //     {1,1,0,1,1},
-   //     {1,1,0,1,1},
-   //     {1,1,0,1,1},
-   // };
-    for(int i=0;i<filas;i++){
-        for(int j=0;j<columnas;j++){
+void Graph::mapa_adyacencia(vector<vector<int>>& mapa) {
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+            if (mapa[i][j] == 0) continue;  // Si es obstáculo, ignoramos
 
-            for(int x = -1;x<2;x++){
-                for(int y = -1;y<2;y++){
+            // Revisamos los vecinos
+            for (int x = -1; x < 2; x++) {
+                for (int y = -1; y < 2; y++) {
+                    if (x == 0 && y == 0) continue;  // No analizamos la celda actual
 
-                    if(x==0 && y==0)continue;
-
-                    if((i+x>-1 && i+x<filas) && (j+y>-1  && j+y<columnas)){
-                        if(mapa[i][j]==1 && mapa[i+x][j+y]==1){
-                            cout<<(i*filas)+j<<","<<((i+x)*filas)+y+j<<endl;
-                            agregar_arista(1,(i*filas)+j,((i+x)*filas)+y+j);
+                    int ni = i + x, nj = j + y;  // Coordenadas del vecino
+                    if (ni >= 0 && ni < filas && nj >= 0 && nj < columnas) {
+                        if (mapa[i][j] == 2 && mapa[ni][nj] == 1) {
+                            // Si la celda actual es un tanque y el vecino es transitable
+                            agregar_arista(1, (i * columnas) + j, (ni * columnas) + nj);
                         }
-                   }
+                        else if (mapa[i][j] == 1 && mapa[ni][nj] == 1) {
+                            // Conexión normal entre celdas transitables
+                            agregar_arista(1, (i * columnas) + j, (ni * columnas) + nj);
+                        }
+                    }
                 }
             }
         }
     }
-};
-
+}
 void Graph::adyacencia_mapa(){
     vector<vector<int>> Matriz_Mapa(filas, vector<int>(columnas, 0));
     //vector<vector<int>> Matriz_Mapa;

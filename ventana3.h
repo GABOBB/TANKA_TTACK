@@ -12,6 +12,7 @@
 #include <QPixmap>
 #include <QTime>
 #include <vector>
+#include "Graph.h"
 #include <QMouseEvent>
 
 
@@ -25,6 +26,7 @@ class MainWindow : public QWidget {
     Q_OBJECT
     vector<vector<int>> Matriz;
     vector<QLabel*> tanques;
+    int tanke=-1;
 
 public:
     MainWindow(std::vector<std::vector<int>>Matriz ,QWidget *parent = nullptr);
@@ -44,6 +46,7 @@ public:
         void tanqueClicked(const QString &nombre);
 protected:
     void mousePressEvent(QMouseEvent *event) override;
+    void MovimientoDeTanque(int i, int j);
 
 private:
     QLabel *label1;

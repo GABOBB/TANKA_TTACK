@@ -90,7 +90,7 @@ MainWindow::MainWindow(std::vector<std::vector<int>> Matriz, QWidget *parent) : 
 
 void MainWindow::llenarTablero(const std::vector<std::vector<int>>& matriz) {
     QGridLayout *gridLayout = new QGridLayout(label2);
-    gridLayout->setSpacing(0);
+    gridLayout->setSpacing(0.1);
 
     QPixmap imagenCero("../photos/coble2.jpeg");
 
@@ -195,7 +195,7 @@ void MainWindow::agregarTanques(const std::vector<std::vector<int>> &matriz) {
     crearLabelTanque(P.fila[3],P.columna[3],rutaTanqueAzul,"tanque Azul 2");
 
     crearLabelTanque(P.fila[4],P.columna[4],rutaTanqueAmarillo,"tanque Amarillo 1");
-    crearLabelTanque(P.fila[5],P.columna[5],rutaTanqueAmarillo,"tanque Amarilla 2");
+    crearLabelTanque(P.fila[5],P.columna[5],rutaTanqueAmarillo,"tanque Amarillp 2");
 
     crearLabelTanque(P.fila[6],P.columna[6],rutaTanqueCeleste,"tanque Celeste 1");
     crearLabelTanque(P.fila[7],P.columna[7],rutaTanqueCeleste,"tanque Celeste 2");
@@ -268,13 +268,29 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
     int screenHeight = screenGeometry.height();
     QRect tempTank = tanques[0]->geometry();
     // También puedes obtener la posición del clic
+
     int x =(event->x()) - (screenWidth-800)/2; int y =(event->y())-(screenHeight-500)/2;
+
     qDebug() << "Clic detectado en posición: (" << x << ", " << y << ")"<<tanques[0]->geometry();
-    int x2 = x/tempTank.width(); int y2 = y/tempTank.height();
+
+    int x2 = x/tempTank.width();
+    int y2 = y/tempTank.height();
+
+
+
     qDebug() << x2<<"~"<<y2;
     for (QLabel* tanque : tanques) {
+        int temp = 0;
         if(tanque->geometry().contains(x,y)) {
+            if((tanque->toolTip().contains("Rojo") || tanque->toolTip().contains("Amarillp")) && tanke == -1) {
+
+            }else if(tanque->toolTip().contains("Celeste") || tanque->toolTip().contains("Azul")) {
+
+            }
             if (event->button() == Qt::LeftButton) {
+                tanke=temp;
+                cout<<temp;
+
                 qDebug() << tanque->toolTip();
 
             }else if (event->button() == Qt::RightButton) {
@@ -283,8 +299,15 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
         }else {
 
         }
+        temp++;
     }
 
 
     QWidget::mousePressEvent(event);
+}
+
+void MainWindow::MovimientoDeTanque(int i, int j) {
+    if(this->tanke == -1) {
+
+    }
 }

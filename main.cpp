@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
     coords in = coords(1,1);
     coords out = coords(1,5);
 
-    cout<<mapa.Dijkstra(in,out)<<endl;
+    cout<<mapa.AStar(in,out)<<endl;
 
 
 

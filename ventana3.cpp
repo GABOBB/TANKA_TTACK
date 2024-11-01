@@ -14,6 +14,8 @@
 #include <QTime>
 #include <QPushButton>
 #include <QDebug>
+#include <QPropertyAnimation>
+#include <QSequentialAnimationGroup>
 #include <QMouseEvent>
 
 
@@ -266,45 +268,85 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
     QRect screenGeometry = screen->geometry();
     int screenWidth = screenGeometry.width();
     int screenHeight = screenGeometry.height();
-    QRect tempTank = tanques[0]->geometry();
-    // También puedes obtener la posición del clic
 
-    int x =(event->x()) - (screenWidth-800)/2; int y =(event->y())-(screenHeight-500)/2;
+    int x = (event->x()) - (screenWidth - 800) / 2;
+    int y = (event->y()) - (screenHeight - 500) / 2;
+    int x2 = x / tanques[0]->geometry().width();
+    int y2 = y / tanques[0]->geometry().height();
 
-    qDebug() << "Clic detectado en posición: (" << x << ", " << y << ")"<<tanques[0]->geometry();
+    static QLabel* selectedTank = nullptr;
+    static bool isFirstClick = true;
 
-    int x2 = x/tempTank.width();
-    int y2 = y/tempTank.height();
-
-
-
-    qDebug() << x2<<"~"<<y2;
-    for (QLabel* tanque : tanques) {
-        int temp = 0;
-        if(tanque->geometry().contains(x,y)) {
-            if((tanque->toolTip().contains("Rojo") || tanque->toolTip().contains("Amarillp")) && tanke == -1) {
-
-            }else if(tanque->toolTip().contains("Celeste") || tanque->toolTip().contains("Azul")) {
-
+    if (event->button() == Qt::LeftButton) {
+        if (isFirstClick) {
+            for (QLabel* tanque : tanques) {
+                if (tanque->geometry().contains(x, y)) {
+                    if (tanque->toolTip().contains("Rojo") || tanque->toolTip().contains("Amarillo")) {
+                        selectedTank = tanque;
+                        isFirstClick = false; // Primer clic completado
+                        qDebug() << "Tanque seleccionado:" << tanque->toolTip();
+                        break;
+                    }
+                }
             }
-            if (event->button() == Qt::LeftButton) {
-                tanke=temp;
-                cout<<temp;
+        } else {
+            // Segundo clic - verificar que el espacio en la matriz es válido
+            if (x2 >= 0 && x2 < Matriz.size() && y2 >= 0 && y2 < Matriz.size()) { // Verificar límites de la matriz
+                int cellValue = Matriz[y2][x2];
+                if (cellValue == 1 && selectedTank) {  // Solo mover si es un espacio vacío
+                    QPoint start = selectedTank->geometry().topLeft();
+                    QPoint end(x, y);
+                    //moveTankAlongPath(selectedTank, start, end); // Llamar a tu algoritmo de movimiento
 
-                qDebug() << tanque->toolTip();
-
-            }else if (event->button() == Qt::RightButton) {
-
+                    selectedTank = nullptr;
+                    isFirstClick = true;
+                } else {
+                    qDebug() << "Movimiento no permitido, espacio ocupado o restringido.";
+                }
             }
-        }else {
-
         }
-        temp++;
     }
-
 
     QWidget::mousePressEvent(event);
 }
+
+
+void MainWindow::moveTankAlongPath(QLabel* tanque, const QPoint& start, const QPoint& end) {
+    // Ruta generada por tu algoritmo (ejemplo de puntos intermedios)
+    QList<QPoint> pathPoints = calculatePath(start, end);  // Implementa o llama a tu algoritmo aquí
+
+    // Grupo de animación para coordinar los movimientos entre puntos
+    QSequentialAnimationGroup *animationGroup = new QSequentialAnimationGroup(this);
+
+    // Crear animaciones para cada tramo de la ruta
+    for (int i = 0; i < pathPoints.size() - 1; ++i) {
+        QPropertyAnimation *animation = new QPropertyAnimation(tanque, "pos");
+        animation->setDuration(200);  // Duración en ms para cada tramo (ajustable)
+        animation->setStartValue(pathPoints[i]);
+        animation->setEndValue(pathPoints[i + 1]);
+        animationGroup->addAnimation(animation);
+    }
+
+    // Iniciar la animación
+    connect(animationGroup, &QSequentialAnimationGroup::finished, animationGroup, &QSequentialAnimationGroup::deleteLater);
+    animationGroup->start();
+}
+
+// Ejemplo de una función que calcula la ruta entre dos puntos
+QList<QPoint> MainWindow::calculatePath(const QPoint& start, const QPoint& end) {
+    //Mi loco, en esa QList es donde hay que conectarlo con los algoritmos
+    QList<QPoint> path;
+    // Aquí puedes añadir los puntos intermedios de la ruta que ya tengas definida
+    path.append(start);
+
+    // Este es solo un ejemplo de puntos; en tu caso, debes llamar a tus algoritmos de ruta.
+    path.append(QPoint((start.x() + end.x()) / 2, start.y()));  // Punto intermedio ejemplo
+    path.append(end);
+
+    return path;
+}
+
+
 
 void MainWindow::MovimientoDeTanque(int i, int j) {
     if(this->tanke == -1) {

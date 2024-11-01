@@ -46,6 +46,11 @@ public:
         void tanqueClicked(const QString &nombre);
 protected:
     void mousePressEvent(QMouseEvent *event) override;
+
+    void moveTankAlongPath(QLabel *tanque, const QPoint &start, const QPoint &end);
+
+    QList<QPoint> calculatePath(const QPoint &start, const QPoint &end);
+
     void MovimientoDeTanque(int i, int j);
 
 private:

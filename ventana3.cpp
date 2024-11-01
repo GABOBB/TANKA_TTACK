@@ -281,19 +281,26 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
         if (isFirstClick) {
             for (QLabel* tanque : tanques) {
                 if (tanque->geometry().contains(x, y)) {
-                    if (tanque->toolTip().contains("Rojo") || tanque->toolTip().contains("Amarillo")) {
+                    qDebug() << "Tanque seleccionado:" << tanque->toolTip();
+                    //if (tanque->toolTip().contains("Rojo") || tanque->toolTip().contains("Amarillo")) {
                         selectedTank = tanque;
                         isFirstClick = false; // Primer clic completado
-                        qDebug() << "Tanque seleccionado:" << tanque->toolTip();
+
                         break;
-                    }
+                    //}else if(tanque->toolTip().contains("Celeste") || tanque->toolTip().contains("Azul")) {
+                   //     selectedTank = tanque;
+                   //     isFirstClick = false; // Primer clic completado
+
+                   //     break;
+                   // }
                 }
             }
         } else {
             // Segundo clic - verificar que el espacio en la matriz es válido
-            if (x2 >= 0 && x2 < Matriz.size() && y2 >= 0 && y2 < Matriz.size()) { // Verificar límites de la matriz
+            if (x2 >= 0 && x2 < Matriz[0].size() && y2 >= 0 && y2 < Matriz.size()) { // Verificar límites de la matriz
                 int cellValue = Matriz[y2][x2];
                 if (cellValue == 1 && selectedTank) {  // Solo mover si es un espacio vacío
+                    qDebug()<< y2 << " - " << x2<<endl;
                     QPoint start = selectedTank->geometry().topLeft();
                     QPoint end(x, y);
                     //moveTankAlongPath(selectedTank, start, end); // Llamar a tu algoritmo de movimiento

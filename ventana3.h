@@ -49,11 +49,12 @@ protected:
 
     void moveTankAlongPath(QLabel *tanque, const QPoint &start, const QPoint &end);
 
-    QList<QPoint> calculatePath(const QPoint &start, const QPoint &end);
+    QList<QPoint> calculatePath(const QPoint &start, const QPoint &end, const string ruta);
 
     void MovimientoDeTanque(int i, int j);
 
 private:
+    Graph mapa;
     QLabel *label1;
     QLabel *label2;
     QLabel *contadorLabel;

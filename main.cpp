@@ -36,12 +36,11 @@ std::vector<std::vector<int>> generate_Mapa() {
 
 
 int main(int argc, char *argv[]) {
-
+    /**///mapa.print();
     vector<vector<int>> M_mapa = generate_Mapa();
 
-    /**/
+
     Graph mapa = Graph(M_mapa.size(),M_mapa[0].size());
-    //mapa.print();
     mapa.mapa_adyacencia(M_mapa);
     //mapa.print();
     coords in = coords(1,1);

@@ -27,7 +27,8 @@
 
 QTimer *timer;
 
-MainWindow::MainWindow(std::vector<std::vector<int>> Matriz, QWidget *parent) : QWidget(parent) {
+MainWindow::MainWindow(std::vector<std::vector<int>> Matriz, QWidget *parent) : QWidget(parent), mapa(Graph(Matriz.size(), Matriz[0].size())) {
+    mapa.mapa_adyacencia(Matriz);
     this->Matriz = Matriz;
     // Obtener el tamaño de la pantalla
     QScreen *screen = QGuiApplication::primaryScreen();
@@ -40,7 +41,7 @@ MainWindow::MainWindow(std::vector<std::vector<int>> Matriz, QWidget *parent) : 
 
     // Crear el primer label que mostrará la imagen de fondo
     label1 = new QLabel(this);
-    label1->setFixedSize(screenWidth, screenHeight);  // Ajusta el tamaño del label según la pantalla
+    label1->setFixedSize(screenWidth, screenHeight); // Ajusta el tamaño del label según la pantalla
     label1->setGeometry(0, 0, screenWidth, screenHeight); // Posición y tamaño de label1
 
     // Cargar una imagen inicial como fondo
@@ -49,9 +50,9 @@ MainWindow::MainWindow(std::vector<std::vector<int>> Matriz, QWidget *parent) : 
 
     // Crear el segundo label que actuará como tablero de juego
     label2 = new QLabel(this);
-    label2->setFixedSize(800, 500);  // Tamaño más pequeño para el tablero de juego
-    label2->setStyleSheet("background-color: rgba(255, 255, 255, 0.5);");  // Fondo semi-transparente
-    label2->setAlignment(Qt::AlignCenter);  // Centrar el contenido
+    label2->setFixedSize(800, 500); // Tamaño más pequeño para el tablero de juego
+    label2->setStyleSheet("background-color: rgba(255, 255, 255, 0.5);"); // Fondo semi-transparente
+    label2->setAlignment(Qt::AlignCenter); // Centrar el contenido
     label2->setGeometry((screenWidth - 800) / 2, (screenHeight - 500) / 2, 800, 500); // Centrar el tablero
 
 
@@ -63,11 +64,11 @@ MainWindow::MainWindow(std::vector<std::vector<int>> Matriz, QWidget *parent) : 
 
     // Crear un QLabel para el contador
     contadorLabel = new QLabel(this);
-    contadorLabel->setGeometry(10, 50, 200, 30);  // Posición y tamaño del label del contador
-    contadorLabel->setStyleSheet("font-size: 20px; color: white;");  // Estilo del contador
+    contadorLabel->setGeometry(10, 50, 200, 30); // Posición y tamaño del label del contador
+    contadorLabel->setStyleSheet("font-size: 20px; color: white;"); // Estilo del contador
 
     // Configurar el temporizador de 5 minutos
-    tiempoRestante = QTime(0, 5, 0);  // Iniciar en 5 minutos
+    tiempoRestante = QTime(0, 5, 0); // Iniciar en 5 minutos
     contadorLabel->setText(tiempoRestante.toString("mm:ss"));
 
     // Crear el QTimer pero no iniciarlo aún
@@ -76,7 +77,7 @@ MainWindow::MainWindow(std::vector<std::vector<int>> Matriz, QWidget *parent) : 
 
     // Crear el botón de inicio del contador
     QPushButton *startButton = new QPushButton("Iniciar Partida", this);
-    startButton->setGeometry(10, 100, 200, 30);  // Posición y tamaño
+    startButton->setGeometry(10, 100, 200, 30); // Posición y tamaño
     connect(startButton, &QPushButton::clicked, this, &MainWindow::iniciarContador);
 
     QComboBox *comboBox2 = new QComboBox(this);
@@ -303,7 +304,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
                     qDebug()<< y2 << " - " << x2<<endl;
                     QPoint start = selectedTank->geometry().topLeft();
                     QPoint end(x, y);
-                    //moveTankAlongPath(selectedTank, start, end); // Llamar a tu algoritmo de movimiento
+                    moveTankAlongPath(selectedTank, start, end); // Llamar a tu algoritmo de movimiento
 
                     selectedTank = nullptr;
                     isFirstClick = true;
@@ -319,8 +320,34 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
 
 
 void MainWindow::moveTankAlongPath(QLabel* tanque, const QPoint& start, const QPoint& end) {
+    cout<< start.x() <<"-"<<start.y() <<"---"<<end.x()<<"-"<<end.y()<<endl;
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect screenGeometry = screen->geometry();
+    int screenWidth = screenGeometry.width();
+    int screenHeight = screenGeometry.height();
+    coords start__ = coords(start.y()- (screenHeight - 500) / 2, start.x()-(screenWidth-800)/2);
+    coords end__ = coords(end.y()- (screenHeight - 500) / 2, end.x()-(screenWidth-800)/2);
+    srand(time(NULL));
+    int ranInt = (rand() % 100) + 1;
+    string ruta;
+    //cout<<start__.i<<" --------------------- "<<start__.j<<endl;
+    if(tanque->toolTip().contains("Amarillo") || tanque->toolTip().contains("Rojo")) {
+        if(ranInt>=80) {
+            cout<<"dijkstra"<<endl;
+            ruta = mapa.Dijkstra(start__,end__);
+        }else {
+            cout<<"aleatorio"<<endl;
+
+        }
+    }else {
+        if(ranInt>=50) {
+            cout<<"bfs"<<endl;
+        }else {
+            cout<<"aleatorio"<<endl;
+        }
+    }
     // Ruta generada por tu algoritmo (ejemplo de puntos intermedios)
-    QList<QPoint> pathPoints = calculatePath(start, end);  // Implementa o llama a tu algoritmo aquí
+    QList<QPoint> pathPoints = calculatePath(start, end, "");  // Implementa o llama a tu algoritmo aquí
 
     // Grupo de animación para coordinar los movimientos entre puntos
     QSequentialAnimationGroup *animationGroup = new QSequentialAnimationGroup(this);
@@ -340,11 +367,35 @@ void MainWindow::moveTankAlongPath(QLabel* tanque, const QPoint& start, const QP
 }
 
 // Ejemplo de una función que calcula la ruta entre dos puntos
-QList<QPoint> MainWindow::calculatePath(const QPoint& start, const QPoint& end) {
-    //Mi loco, en esa QList es donde hay que conectarlo con los algoritmos
+QList<QPoint> MainWindow::calculatePath(const QPoint& start, const QPoint& end, const string ruta) {
     QList<QPoint> path;
-    // Aquí puedes añadir los puntos intermedios de la ruta que ya tengas definida
     path.append(start);
+    QPoint temp = start;
+    for (int i = 0; i < ruta.length(); i++) {
+        if(ruta[i] == 'U') {
+        temp = QPoint(temp.y()+tanques[0]->geometry().height(),temp.x());
+        path.append(temp);
+        }else if(ruta[i] == 'D') {
+
+        }else if(ruta[i] == 'R') {
+
+        }else if(ruta[i] == 'L') {
+
+        }else if(ruta[i] == 'A') {
+
+        }else if(ruta[i] == 'a') {
+
+        }else if(ruta[i] == 'B') {
+
+        }else if(ruta[i] == 'b') {
+
+        }
+
+    }
+    //Mi loco, en esa QList es donde hay que conectarlo con los algoritmos
+
+    // Aquí puedes añadir los puntos intermedios de la ruta que ya tengas definida
+
 
     // Este es solo un ejemplo de puntos; en tu caso, debes llamar a tus algoritmos de ruta.
     path.append(QPoint((start.x() + end.x()) / 2, start.y()));  // Punto intermedio ejemplo
